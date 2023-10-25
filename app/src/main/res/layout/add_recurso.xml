@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddRecurso">
+
+    <LinearLayout
+        android:id="@+id/titleRecurso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Recurso"
+            android:textSize="25dp"
+            android:fontFamily="@font/nunito_sans"
+            android:textStyle="bold"
+            android:padding="16dp" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:elevation="5dp"
+        android:layout_margin="16dp"
+        android:layout_below="@id/titleRecurso">
+
+        <LinearLayout
+            android:id="@+id/CardRecursos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+
+            <EditText
+                android:id="@+id/NombreRecurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre:"
+                android:textSize="20dp"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_margin="8dp"/>
+
+            <EditText
+                android:id="@+id/CantidadRecurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cantidad:"
+                android:textSize="20dp"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_margin="8dp"
+                android:inputType="number"/>
+
+            <Button
+                android:id="@+id/BtnAddRecurso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agregar"
+                android:textSize="16dp"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_gravity="center"
+                android:layout_marginVertical="25dp"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
