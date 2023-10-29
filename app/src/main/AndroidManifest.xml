@@ -22,9 +22,6 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewToAdd.AddRecurso"
-            android:exported="false" />
-        <activity
             android:name=".Splash.SplashActivity"
             android:exported="true">
             <intent-filter>
