@@ -24,7 +24,7 @@
         android:textSize="25dp"
         android:fontFamily="@font/nunito_sans"
         android:gravity="center"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="95dp"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_Resource"
