@@ -9,6 +9,10 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.eramonmanager.Fragment.FragmentHistorial;
+import com.example.eramonmanager.Fragment.FragmentHome;
+import com.example.eramonmanager.Fragment.FragmentReservations;
+import com.example.eramonmanager.Fragment.FragmentResources;
 import com.example.eramonmanager.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,13 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
             if (itemId == R.id.home_) {
                 replaceFragment(new FragmentHome());
-            } else if (itemId == R.id.category_) {
-                replaceFragment(new FragmentListaReservas());
+            } else if (itemId == R.id.reservas_) {
+                replaceFragment(new FragmentReservations());
+            } else if (itemId == R.id.recursos_) {
+                replaceFragment(new FragmentResources());
             } else if (itemId == R.id.historial_) {
-                replaceFragment(new FragmentRecursos());
+                replaceFragment(new FragmentHistorial());
             }
             return true;
         });
+
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -67,4 +74,8 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         rootView.getViewTreeObserver().removeOnGlobalLayoutListener(null);
     }
+
+
+
+
 }

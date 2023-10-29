@@ -2,4 +2,15 @@
     <string name="app_name">EramonManager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="resource_array">
+        <item>Recurso 1</item>
+        <item>Recurso 2</item>
+        <item>Recurso 3</item>
+        <item>Recurso 122222</item>
+        <item>Recurso 284848</item>
+        <item>Recurso 38484848dfdfdfdfdfdf</item>
+        <!-- Agrega más recursos aquí -->
+    </string-array>
+
 </resources>

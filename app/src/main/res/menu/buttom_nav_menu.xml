@@ -6,11 +6,15 @@
         android:icon="@drawable/home"
         android:title="Home"/>
     <item
-        android:id="@+id/category_"
+        android:id="@+id/reservas_"
         android:icon="@drawable/list"
-        android:title="Categoria" />
+        android:title="Reservaciones" />
+    <item
+        android:id="@+id/recursos_"
+        android:icon="@drawable/resources"
+        android:title="Recursos" />
     <item
         android:id="@+id/historial_"
-        android:icon="@drawable/recursos"
+        android:icon="@drawable/historial"
         android:title="Historial" />
 </menu>

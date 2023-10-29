@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/baseline_person_24"/>
+
+            <TextView
+                android:id="@+id/Reservation_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_marginStart="30dp"/>
+
+            <ImageView
+                android:id="@+id/PDF_Reservation"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="5dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/pdf"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/Tel_Reservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tel:"
+            android:maxLines="1"
+            android:textSize="17dp"
+            android:layout_marginVertical="6dp"/>
+
+        <TextView
+            android:id="@+id/Timestamp_Reservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="reservation date"
+            android:textSize="15dp"
+            android:gravity="right"
+            android:layout_marginVertical="4dp"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

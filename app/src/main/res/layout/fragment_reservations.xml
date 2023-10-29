@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/background_fragment"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/encabezadoReservations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/nunito_sans"
+            android:text="Lista de reservaciones"
+            android:textSize="32dp" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/SearchView_Reservation"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:iconifiedByDefault="false"
+            android:background="@drawable/border_searchview"
+            app:queryHint="Buscar reservación">
+
+        </androidx.appcompat.widget.SearchView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Button_AddReservation"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:text="Todas"
+                android:textSize="18dp"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/colorPrimaryDarkest"
+                android:layout_below="@+id/cardView_Reservation"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/Button_UploadPhoto"
+                android:layout_width="140dp"
+                android:layout_height="45dp"
+                android:text="Pendientes"
+                android:textSize="18dp"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="100dp"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Recyler_View_Reservation"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:padding="16dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/Add_Reservation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/add"
+                app:tint="@color/colorPrimaryLight"
+                android:tintMode="screen"
+                app:backgroundTint="@color/colorPrimaryLight">
+
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>
