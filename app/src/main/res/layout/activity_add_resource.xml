@@ -50,6 +50,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewNameResource"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre:"
@@ -65,7 +66,8 @@
                     android:maxLines="1"
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"/>
+                    android:backgroundTint="@color/colorPrimaryLight"
+                    android:layout_toEndOf="@+id/TextViewNameResource"/>
 
             </RelativeLayout>
 
@@ -75,6 +77,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewCantidadResource"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cantidad:"
@@ -91,7 +94,8 @@
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:layout_toEndOf="@+id/TextViewCantidadResource"/>
 
             </RelativeLayout>
 
