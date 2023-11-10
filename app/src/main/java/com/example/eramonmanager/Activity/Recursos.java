@@ -137,11 +137,18 @@ public class Recursos {
 
     public void Eliminar(String Eliminar){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference recursosRef = database.getReference("CRUD Recursos ERAMON");
+        DatabaseReference recursosRef = database.getReference("EramonManager");
 
         String idRecursosAEliminar = Eliminar;
         recursosRef.child(idRecursosAEliminar).removeValue();
 
+    }
+
+    private String idDelRecurso;
+    // Otros campos y métodos
+
+    public String getIdDelRecurso() {
+        return idDelRecurso;
     }
 
 }

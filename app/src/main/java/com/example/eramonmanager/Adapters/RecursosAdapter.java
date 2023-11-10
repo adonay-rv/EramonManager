@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,19 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
                 .load(recursos.getImagenUrl())
                 .centerCrop()
                 .into(holder.imageView);
+
+        final String resourceId = recursosList.get(position).getIdDelRecurso(); // Reemplaza getIdDelRecurso con el método adecuado para obtener el ID
+
+        // Botón de eliminación
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Llamar al método Eliminar con el ID del recurso a eliminar
+                Recursos r = new Recursos();
+                r.Eliminar(resourceId);
+                // Ahora aquí, podrías también actualizar la lista o la interfaz de usuario para reflejar el cambio.
+            }
+        });
     }
 
     @Override
@@ -58,12 +72,16 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
         TextView txtAmount;
         TextView txtTimestamp;
 
+
+        ImageButton deleteButton;
         public RecursosViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.ListImageResources);
             txtName = itemView.findViewById(R.id.ListNameResource);
             txtAmount = itemView.findViewById(R.id.MountResources);
             txtTimestamp = itemView.findViewById(R.id.Timestamp_Reservation);
+
+            deleteButton = itemView.findViewById(R.id.Button_Delete);
         }
     }
 }
