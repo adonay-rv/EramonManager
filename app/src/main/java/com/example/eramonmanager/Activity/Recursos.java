@@ -1,5 +1,7 @@
 package com.example.eramonmanager.Activity;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -84,7 +86,7 @@ public class Recursos {
 
     public void buscarEnFirebase(String dato, BusquedaCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference recursosRef = database.getReference("CRUD Recursos ERAMON");
+        DatabaseReference recursosRef = database.getReference("Recursos");
 
         recursosRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -113,7 +115,7 @@ public class Recursos {
 
 
     public void Actualizar(String idRecurso, int nuevaCantidad, String nuevoNombre, String nuevaImagenUrl, String nuevaFecha) {
-        DatabaseReference recursosRef = FirebaseDatabase.getInstance().getReference("CRUD Recursos ERAMON");
+        DatabaseReference recursosRef = FirebaseDatabase.getInstance().getReference("Recursos");
         String idRecursosAActualizar = idRecurso;
 
         Map<String, Object> actualizacion = new HashMap<>();
@@ -127,7 +129,7 @@ public class Recursos {
 
     public void Crear(String idRecursos, String nombreRecurso, int cantidad, String imagenUrl, String fecha) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference recursosRef = database.getReference("CRUD Recursos ERAMON");
+        DatabaseReference recursosRef = database.getReference("Recursos");
 
         Recursos recurso = new Recursos(idRecursos, nombreRecurso, cantidad, imagenUrl, fecha);
 
@@ -135,21 +137,16 @@ public class Recursos {
     }
 
 
-    public void Eliminar(String Eliminar){
+    public static void Eliminar(String resourceId) {
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference recursosRef = database.getReference("EramonManager");
-
-        String idRecursosAEliminar = Eliminar;
+        DatabaseReference recursosRef = database.getReference("Recursos");
+        String idRecursosAEliminar = resourceId;
         recursosRef.child(idRecursosAEliminar).removeValue();
-
+        Log.d(null, resourceId);
     }
 
-    private String idDelRecurso;
-    // Otros campos y métodos
 
-    public String getIdDelRecurso() {
-        return idDelRecurso;
-    }
 
 }
 
