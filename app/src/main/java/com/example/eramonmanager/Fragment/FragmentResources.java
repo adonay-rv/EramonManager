@@ -57,7 +57,7 @@ public class FragmentResources extends Fragment {
     }
 
     private void obtenerDatosDeFirebase() {
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("CRUD Recursos ERAMON");
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Recursos");
 
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
