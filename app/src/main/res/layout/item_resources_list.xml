@@ -13,7 +13,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ListImageResources"
@@ -36,12 +36,13 @@
             android:fontFamily="@font/nunito_sans"
             android:text="Name"
             android:textSize="18dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="100dp"
+        <ImageButton
+            android:id="@+id/Button_Delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="12dp"
             android:layout_toEndOf="@id/ListNameResource"
             android:backgroundTint="#00FFFFFF"
@@ -62,17 +63,17 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_sans"
                 android:text="Disponible: 10"
-                android:textSize="18dp"/>
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/Timestamp_Reservation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="25dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@id/MountResources"
                 android:text="resources date"
-                android:textSize="15dp"
-                android:layout_toEndOf="@id/MountResources"/>
+                android:textSize="15dp" />
 
         </RelativeLayout>
 
