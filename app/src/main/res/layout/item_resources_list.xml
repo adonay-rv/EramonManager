@@ -50,6 +50,7 @@
             android:src="@drawable/delete_button" />
 
         <RelativeLayout
+            android:id="@+id/TitleDisponibleResource"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/ListNameResource"
@@ -65,17 +66,19 @@
                 android:text="Disponible: 10"
                 android:textSize="18dp" />
 
-            <TextView
-                android:id="@+id/Timestamp_Reservation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@id/MountResources"
-                android:text="resources date"
-                android:textSize="15dp" />
-
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/Timestamp_Reservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:text="resources date"
+            android:textSize="15dp"
+            android:layout_below="@id/TitleDisponibleResource"
+            android:gravity="end"
+            android:layout_marginEnd="16dp"/>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

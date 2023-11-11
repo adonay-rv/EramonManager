@@ -50,6 +50,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewNameReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre:"
@@ -65,9 +66,11 @@
                     android:maxLines="1"
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"/>
+                    android:backgroundTint="@color/colorPrimaryLight"
+                    android:layout_toEndOf="@id/TextViewNameReservation"/>
 
             </RelativeLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -75,6 +78,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewDuiReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Dui:"
@@ -91,7 +95,10 @@
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:layout_toEndOf="@id/TextViewDuiReservation"/>
+
+
 
             </RelativeLayout>
 
@@ -101,6 +108,35 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewTelReservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tel:"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:layout_marginTop="5dp"/>
+
+                <EditText
+                    android:id="@+id/Add_Reservation_Tel"
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:maxLines="1"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:backgroundTint="@color/colorPrimaryLight"
+                    android:inputType="number"
+                    android:layout_toEndOf="@id/TextViewTelReservation"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/TextViewMountPerReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cantidad de personas:"
@@ -117,7 +153,8 @@
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:layout_toEndOf="@id/TextViewMountPerReservation"/>
 
             </RelativeLayout>
 
@@ -166,9 +203,10 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewDateReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fecha de eservación:"
+                    android:text="Fecha de reservación:"
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:layout_marginTop="5dp"/>
@@ -182,7 +220,8 @@
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="datetime"/>
+                    android:inputType="datetime"
+                    android:layout_toEndOf="@id/TextViewDateReservation"/>
 
             </RelativeLayout>
 
@@ -192,6 +231,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewDateOutReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fecha de salida:"
@@ -208,7 +248,8 @@
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="datetime"/>
+                    android:inputType="datetime"
+                    android:layout_toEndOf="@id/TextViewDateOutReservation"/>
 
             </RelativeLayout>
 
@@ -218,6 +259,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/TextViewPriceReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Precio del paquete:"
@@ -234,7 +276,8 @@
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:layout_toEndOf="@id/TextViewPriceReservation"/>
 
             </RelativeLayout>
 
@@ -300,7 +343,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recursos:"
+                    android:text="Comprobante:"
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:layout_marginTop="5dp"/>
@@ -331,7 +374,7 @@
         android:textSize="18dp"
         android:fontFamily="@font/nunito_sans"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="-20dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/colorPrimaryDarkest"
         android:layout_below="@+id/cardView_Reservation"

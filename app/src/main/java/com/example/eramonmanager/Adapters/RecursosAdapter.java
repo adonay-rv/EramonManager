@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.eramonmanager.Activity.Recursos;
 import com.example.eramonmanager.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.RecursosViewHolder> {
@@ -84,5 +85,12 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
 
             deleteButton = itemView.findViewById(R.id.Button_Delete);
         }
+    }
+    public List<String> getNombresRecursos() {
+        List<String> nombres = new ArrayList<>();
+        for (Recursos recurso : recursosList) {
+            nombres.add(recurso.getNombreRecurso());
+        }
+        return nombres;
     }
 }

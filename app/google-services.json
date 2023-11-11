@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "314916210274",
+    "firebase_url": "https://eramonmanager-c3d70-default-rtdb.firebaseio.com",
+    "project_id": "eramonmanager-c3d70",
+    "storage_bucket": "eramonmanager-c3d70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314916210274:android:9d75e37b4fdd3002adf33b",
+        "android_client_info": {
+          "package_name": "com.example.eramonmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBppH7hahHaIPVyQXBUS8s9yTEs3fvIFb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
