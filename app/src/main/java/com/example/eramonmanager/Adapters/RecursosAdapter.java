@@ -86,11 +86,13 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
             deleteButton = itemView.findViewById(R.id.Button_Delete);
         }
     }
-    public List<String> getNombresRecursos() {
-        List<String> nombres = new ArrayList<>();
+    public List<String> getNombresYCantidadesRecursos() {
+        List<String> nombresYCantidades = new ArrayList<>();
         for (Recursos recurso : recursosList) {
-            nombres.add(recurso.getNombreRecurso());
+            // Concatena el nombre y la cantidad en un solo String
+            String nombreYCantidad = recurso.getNombreRecurso() + " - Disponible: " + recurso.getCantidadRecurso();
+            nombresYCantidades.add(nombreYCantidad);
         }
-        return nombres;
+        return nombresYCantidades;
     }
 }

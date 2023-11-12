@@ -3,26 +3,37 @@ package com.example.eramonmanager.Activity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.view.View;
+
+import java.util.List;
+
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+
+import com.example.eramonmanager.Activity.Recursos.MostrarRecursosCallback;
 import com.example.eramonmanager.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.ArrayList;
 
 public class AddReservationActivity extends AppCompatActivity {
 
@@ -39,6 +50,7 @@ public class AddReservationActivity extends AppCompatActivity {
     private boolean[] selectedOptions;
     private String[] options;
 
+    public String info;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -53,11 +65,31 @@ public class AddReservationActivity extends AppCompatActivity {
 
             imageUrl1 = filePath.toString();
         }
+
+
+
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reservation);
+
+        chipGroup = findViewById(R.id.ChipGroupResources);
+        seleccionarButton = findViewById(R.id.SelectResources);
+
+        options = getResources().getStringArray(R.array.resource_array);
+        selectedOptions = new boolean[options.length];
+
+        seleccionarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOptionSelectionDialog();
+
+            }
+        });
+
+        obtenerNombresRecursos();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
@@ -84,12 +116,14 @@ public class AddReservationActivity extends AppCompatActivity {
                 String dateOutStr = dateOutEditText.getText().toString();
                 String priceStr = priceEditText.getText().toString();
 
+
+
                 int dui = Integer.parseInt(duiStr);
                 int tel = Integer.parseInt(telStr);
                 int cantidadPeople = Integer.parseInt(cantidadPeopleStr);
                 double precioReservacion = Double.parseDouble(priceStr);
 
-                if (!TextUtils.isEmpty(imageUrl1)) {
+               // if (!TextUtils.isEmpty(imageUrl1)) {
 
 
                     String idReservacion = mDatabase.child("Reservaciones").push().getKey();
@@ -100,12 +134,14 @@ public class AddReservationActivity extends AppCompatActivity {
                     Reservaciones reservaciones = new Reservaciones();
 
 
-                    reservaciones.crearReservacion(idReservacion, nombreReservacion, dui, tel, cantidadPeople, "aosjdopa",
+                    reservaciones.crearReservacion(idReservacion, nombreReservacion, dui, tel, cantidadPeople, info,
                             dateReservationStr, dateOutStr, precioReservacion, estado, imageUrl1);
 
 
-                }
+               // }
             }
+
+
 
 
 
@@ -115,16 +151,17 @@ public class AddReservationActivity extends AppCompatActivity {
 
 
 
-        chipGroup = findViewById(R.id.ChipGroupResources);
+
         seleccionarButton = findViewById(R.id.SelectResources);
 
-        options = getResources().getStringArray(R.array.resource_array);
+
         selectedOptions = new boolean[options.length];
 
         seleccionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showOptionSelectionDialog();
+
             }
         });
 
@@ -135,47 +172,87 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void obtenerNombresRecursos() {
+        Recursos recursos = new Recursos();
+        recursos.mostrarRecursos(new Recursos.MostrarRecursosCallback() {
+            @Override
+            public void onResultado(List<String> nombresRecursos) {
+                // Actualiza la variable 'options' con los nombres de recursos obtenidos
+                options = nombresRecursos.toArray(new String[0]);
+            }
+        });
+    }
 
     private void showOptionSelectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona las opciones");
-        builder.setMultiChoiceItems(options, selectedOptions, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                selectedOptions[which] = isChecked;
-            }
-        });
+
+        // Crear una lista de vistas que contengan un TextView y un EditText para cada opción
+        List<View> optionViews = new ArrayList<>();
+
+        for (int i = 0; i < options.length; i++) {
+            View optionView = getLayoutInflater().inflate(R.layout.item_dialog_option, null);
+
+            // Configurar el TextView con la opción
+            TextView optionTextView = optionView.findViewById(R.id.dialogOptionTextView);
+            optionTextView.setText(options[i]);
+
+            // Configurar el EditText para la cantidad (solo números)
+            EditText editText = optionView.findViewById(R.id.dialogEditText);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            // Agregar la vista a la lista
+            optionViews.add(optionView);
+        }
+
+        // Agregar las vistas a un LinearLayout dentro del diálogo
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        for (View optionView : optionViews) {
+            linearLayout.addView(optionView);
+        }
+
+        builder.setView(linearLayout);
+
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                updateChipGroup();
+                updateChipGroup(optionViews);
             }
         });
+
         builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
 
-    private void updateChipGroup() {
+    private void updateChipGroup(List<View> optionViews) {
         chipGroup.removeAllViews();
+
         for (int i = 0; i < options.length; i++) {
-            if (selectedOptions[i]) {
-                Chip chip = new Chip(this);
-                chip.setText(options[i]);
-                chip.setCloseIconVisible(true);
-                chip.setCheckable(false);
+            View optionView = optionViews.get(i);
+            TextView optionTextView = optionView.findViewById(R.id.dialogOptionTextView);
+            EditText editText = optionView.findViewById(R.id.dialogEditText);
+
+            if (!editText.getText().toString().isEmpty()) {
+                Chip dynamicChip = new Chip(this);
+                dynamicChip.setText(options[i] + " -Cant. " + editText.getText().toString());
+                info += options[i] + " -Cant. " + editText.getText().toString() + ", ";
+                dynamicChip.setCloseIconVisible(true);
+                dynamicChip.setCheckable(false);
                 final int position = i;
-                chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                dynamicChip.setOnCloseIconClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        selectedOptions[position] = false;
-                        updateChipGroup();
+                        editText.getText().clear();
+                        updateChipGroup(optionViews);
                     }
                 });
-                chipGroup.addView(chip);
+                chipGroup.addView(dynamicChip);
             }
         }
     }
+
 
 
     @SuppressLint("NonConstantResourceId")
@@ -194,6 +271,8 @@ public class AddReservationActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST1);
     }
+
+
 
 
 }

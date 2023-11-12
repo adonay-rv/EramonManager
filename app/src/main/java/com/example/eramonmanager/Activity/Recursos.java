@@ -8,7 +8,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Recursos {
@@ -146,8 +148,35 @@ public class Recursos {
         Log.d(null, resourceId);
     }
 
+    public interface MostrarRecursosCallback {
+        void onResultado(List<String> nombresRecursos);
+    }
 
+    public void mostrarRecursos(MostrarRecursosCallback callback) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference recursosRef = database.getReference("Recursos");
+
+        recursosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> nombresRecursos = new ArrayList<>();
+
+                for (DataSnapshot nodeSnapshot : dataSnapshot.getChildren()) {
+                    String nombreRecurso = nodeSnapshot.child("nombreRecurso").getValue(String.class);
+                    if (nombreRecurso != null) {
+                        nombresRecursos.add(nombreRecurso);
+                    }
+                }
+
+                // Llama al método de devolución de llamada con los nombres de recursos
+                callback.onResultado(nombresRecursos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Manejar errores
+            }
+        });
+    }
 
 }
-
-
