@@ -36,11 +36,12 @@
                 android:fontFamily="@font/nunito_sans"
                 android:layout_marginStart="30dp"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/PDF_Reservation"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginEnd="5dp"
+                android:scaleType="centerCrop"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/pdf"/>
 
