@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -34,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class AddReservationActivity extends AppCompatActivity {
 
@@ -44,8 +47,10 @@ public class AddReservationActivity extends AppCompatActivity {
     private String imageUrl1;
     private static final int PICK_IMAGE_REQUEST1 = 1;
     private Button imageButton1;
+   private TextView pageTitleTextView;
+    boolean isEditMode = false;
 
-
+    EditText titleEditText,teledit,duiedit,cantidadedit,reservacionedit,salidaedit,precoedit;
     private ImageButton seleccionarButton;
     private boolean[] selectedOptions;
     private String[] options;
@@ -74,6 +79,56 @@ public class AddReservationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reservation);
+
+
+        //titleEditText = findViewById(R.id.Add_Reservation_Name);
+
+
+
+
+        pageTitleTextView = findViewById(R.id.pagetitle);
+titleEditText=findViewById(R.id.Add_Reservation_Name);
+duiedit=findViewById(R.id.Add_Reservation_Dui);
+teledit=findViewById(R.id.Add_Reservation_Tel);
+precoedit=findViewById(R.id.Add_Reservation_ReservationPrice);
+reservacionedit=findViewById(R.id.Add_Reservation_DateReservation);
+salidaedit=findViewById(R.id.Add_Reservation_DateOut);
+cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
+
+        //receive data
+
+
+        String title = getIntent().getStringExtra("title");
+        int dui = getIntent().getIntExtra("dui", 0);  // 0 es el valor predeterminado si "dui" no está presente
+        int tel = getIntent().getIntExtra("tel", 0);  // 0 es el valor predeterminado si "tel" no está presente
+        int cantidadp = getIntent().getIntExtra("cantidad", 0);
+        double precio = getIntent().getDoubleExtra("precio", 0.0);  // 0.0 es el valor predeterminado si "precio" no está presente
+        String fechareservacion = getIntent().getStringExtra("reservacion");
+        String fechasalida = getIntent().getStringExtra("salida");
+        String docId = getIntent().getStringExtra("docId");
+        titleEditText.setText(title);
+        teledit.setText(String.valueOf(tel));
+        duiedit.setText(String.valueOf(dui));
+        cantidadedit.setText(String.valueOf(cantidadp));
+        precoedit.setText(String.valueOf(precio));
+        reservacionedit.setText(fechareservacion);
+        salidaedit.setText(fechasalida);
+        Log.d("AddReservationActivity", "docId: " + docId);
+
+        if(docId!=null && !docId.isEmpty()){
+            isEditMode = true;
+        }
+
+
+
+        if(isEditMode){
+            pageTitleTextView.setText("Edit your note");
+
+        }
+
+
+
+
 
         chipGroup = findViewById(R.id.ChipGroupResources);
         seleccionarButton = findViewById(R.id.SelectResources);
@@ -117,35 +172,40 @@ public class AddReservationActivity extends AppCompatActivity {
                 String priceStr = priceEditText.getText().toString();
 
 
-
                 int dui = Integer.parseInt(duiStr);
                 int tel = Integer.parseInt(telStr);
                 int cantidadPeople = Integer.parseInt(cantidadPeopleStr);
                 double precioReservacion = Double.parseDouble(priceStr);
 
-               // if (!TextUtils.isEmpty(imageUrl1)) {
+                // if (!TextUtils.isEmpty(imageUrl1)) {
 
+                String idReservacion = mDatabase.child("Reservaciones").push().getKey();
+                RadioGroup radioGroup = findViewById(R.id.radioGroupStatus);
+                int radioButtonId = radioGroup.getCheckedRadioButtonId();
+                String estado = obtenerEstadoPorRadioButtonId(radioButtonId);
 
-                    String idReservacion = mDatabase.child("Reservaciones").push().getKey();
-                    RadioGroup radioGroup = findViewById(R.id.radioGroupStatus);
-                    int radioButtonId = radioGroup.getCheckedRadioButtonId();
-                    String estado = obtenerEstadoPorRadioButtonId(radioButtonId);
-
-                    Reservaciones reservaciones = new Reservaciones();
-
-
-                    reservaciones.crearReservacion(idReservacion, nombreReservacion, dui, tel, cantidadPeople, info,
+                Reservaciones reservaciones = new Reservaciones();
+                if (isEditMode) {
+                    pageTitleTextView.setText("edicion");
+                    // Modo de edición: Actualizar la reserva existente
+                    reservaciones.actualizarReserva(
+                            docId, nombreReservacion, dui, tel, cantidadPeople, info,
                             dateReservationStr, dateOutStr, precioReservacion, estado, imageUrl1);
+                } else {
+                    // Modo de creación: Crear una nueva reserva
+                    reservaciones.crearReservacion(
+                            idReservacion, nombreReservacion, dui, tel, cantidadPeople, info,
+                            dateReservationStr, dateOutStr, precioReservacion, estado, imageUrl1);
+                }
 
-
-               // }
+                // Cerrar la actividad o realizar otras acciones según sea necesario
+                finish();
             }
-
-
-
-
-
         });
+
+
+
+
 
 
 
