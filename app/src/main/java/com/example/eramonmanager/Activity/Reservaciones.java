@@ -1,9 +1,21 @@
 package com.example.eramonmanager.Activity;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Reservaciones {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Reservaciones implements Serializable {
     private String idReservacion;
     private String nombre;
     private int dui;
@@ -130,6 +142,42 @@ public class Reservaciones {
         Reservaciones reservacion = new Reservaciones(idReservacion, nombre, dui, tel, cantidadPersonas, recursos, dateReservation, fechaSalida, precioReservacion, estado, comprobantePago);
 
         reservacionesRef.child(idReservacion).setValue(reservacion);
+    }
+    public void actualizarReserva(String idReservacion, String nombreReservacion, int dui, int tel, int cantidadPeople,
+                                  String info, String dateReservation, String dateOut, double precioReservacion,
+                                  String estado, String imageUrl) {
+        // Obtén una referencia a la base de datos Firebase
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Reservaciones");
+
+        // Construye el mapa de valores que se van a actualizar
+        Map<String, Object> reservaMap = new HashMap<>();
+        reservaMap.put("nombre", nombreReservacion);
+        reservaMap.put("dui", dui);
+        reservaMap.put("tel", tel);
+        reservaMap.put("cantidadPersonas", cantidadPeople);
+        reservaMap.put("info", info);
+        reservaMap.put("dateReservation", dateReservation);
+        reservaMap.put("dateOut", dateOut);
+        reservaMap.put("precioReservacion", precioReservacion);
+        reservaMap.put("estado", estado);
+        reservaMap.put("imageUrl", imageUrl);
+
+        // Actualiza los valores en la base de datos
+        databaseReference.child(idReservacion).updateChildren(reservaMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // La actualización fue exitosa
+                        Log.d(TAG, "Reserva actualizada con éxito");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // La actualización falló
+                        Log.e(TAG, "Error al actualizar la reserva", e);
+                    }
+                });
     }
 
 }

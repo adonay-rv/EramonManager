@@ -8,6 +8,7 @@
     tools:context=".Activity.AddReservationActivity">
 
     <TextView
+        android:id="@+id/pagetitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Agregar reservación"
@@ -182,6 +183,7 @@
                     android:src="@drawable/options" />
 
                 <HorizontalScrollView
+                    android:id="@+id/recursosmostrar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/optionsTextViewResources">
@@ -263,10 +265,10 @@
                     android:id="@+id/TextViewPriceReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Precio del paquete:"
-                    android:textSize="18dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
+                    android:text="Precio del paquete:"
+                    android:textSize="18dp" />
 
                 <EditText
                     android:id="@+id/Add_Reservation_ReservationPrice"
