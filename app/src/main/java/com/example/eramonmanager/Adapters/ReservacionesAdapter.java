@@ -1,6 +1,8 @@
 package com.example.eramonmanager.Adapters;
 
 import static com.example.eramonmanager.Activity.Recursos.Eliminar;
+import static com.example.eramonmanager.Activity.Reservaciones.EliminarR;
+
 
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +66,6 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
                 // Obtiene la Reservacion en la posición dada
                 Reservaciones reservacion = reservasList.get(positions);
 
-
                 // Agrega datos adicionales al intento utilizando pares clave-valor.
                 intent.putExtra("title", reservacion.getNombre());
                 intent.putExtra("dui", reservacion.getDui());
@@ -73,15 +74,27 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
                 intent.putExtra("reservacion", reservacion.getDateReservation());
                 intent.putExtra("precio", reservacion.getPrecioReservacion());
                 intent.putExtra("salida", reservacion.getFechaSalida());
+                intent.putExtra("estado",reservacion.getEstado());
 
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservacion.getId());
-                Log.d("ReservacionAdapter", "Reserva ID: " + positions);
+
+                // Muestra el ID de la reserva en los logs
+                Log.d("ReservacionAdapter", "Reserva ID: " + reservacion.getId());
+
                 // Inicia la actividad AddReservationActivity con el intento configurado.
                 context.startActivity(intent);
             }
         });
 
+        final String resourceId = reservas.getNombre();
+        holder.deleteButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+EliminarR(resourceId);
+
+            }
+        });
 
         // Reemplaza getIdDelRecurso con el método adecuado para obtener el ID
 
@@ -111,6 +124,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
 
 
         ImageButton pdfButton;
+        ImageButton deleteButton1;
         public ReservacionesViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.Reservation_Name);
@@ -118,6 +132,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
             txtTimestamp = itemView.findViewById(R.id.Timestamp_Reservation);
 
             pdfButton = itemView.findViewById(R.id.PDF_Reservation);
+            deleteButton1 = itemView.findViewById(R.id.Button_Delete_R);
         }
     }
 

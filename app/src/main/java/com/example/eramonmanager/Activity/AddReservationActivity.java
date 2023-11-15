@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -54,6 +55,7 @@ public class AddReservationActivity extends AppCompatActivity {
     private ImageButton seleccionarButton;
     private boolean[] selectedOptions;
     private String[] options;
+    RadioGroup estadoR;
 
     public String info;
 
@@ -95,6 +97,7 @@ reservacionedit=findViewById(R.id.Add_Reservation_DateReservation);
 salidaedit=findViewById(R.id.Add_Reservation_DateOut);
 cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
 
+
         //receive data
 
 
@@ -106,6 +109,8 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
         String fechareservacion = getIntent().getStringExtra("reservacion");
         String fechasalida = getIntent().getStringExtra("salida");
         String docId = getIntent().getStringExtra("docId");
+
+
         titleEditText.setText(title);
         teledit.setText(String.valueOf(tel));
         duiedit.setText(String.valueOf(dui));
@@ -113,16 +118,38 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
         precoedit.setText(String.valueOf(precio));
         reservacionedit.setText(fechareservacion);
         salidaedit.setText(fechasalida);
-        Log.d("AddReservationActivity", "docId: " + docId);
+        Log.d("AddReservationActivity", "docId: " + title);
 
-        if(docId!=null && !docId.isEmpty()){
+        estadoR = findViewById(R.id.radioGroupStatus);
+        RadioButton radioButtonCancelled = findViewById(R.id.radioButtonCancelled);
+        RadioButton radioButtonPending = findViewById(R.id.radioButtonPending);
+
+// Recuperar el estado de la intención
+        String estado = getIntent().getStringExtra("estado");
+
+// Establecer el estado en el RadioButton correspondiente
+        if (estado != null) {
+            if (estado.equals("Cancelado")) {
+                radioButtonCancelled.setChecked(true);
+            } else if (estado.equals("Pendiente")) {
+                radioButtonPending.setChecked(true);
+            }
+        }
+
+
+
+
+
+
+
+        if(title!=null && !title.isEmpty()){
             isEditMode = true;
         }
 
 
 
         if(isEditMode){
-            pageTitleTextView.setText("Edit your note");
+            pageTitleTextView.setText("Editar Reservaciones");
 
         }
 
@@ -186,15 +213,15 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
 
                 Reservaciones reservaciones = new Reservaciones();
                 if (isEditMode) {
-                    pageTitleTextView.setText("edicion");
+
                     // Modo de edición: Actualizar la reserva existente
                     reservaciones.actualizarReserva(
-                            docId, nombreReservacion, dui, tel, cantidadPeople, info,
+                            title, nombreReservacion, dui, tel, cantidadPeople, info,
                             dateReservationStr, dateOutStr, precioReservacion, estado, imageUrl1);
                 } else {
                     // Modo de creación: Crear una nueva reserva
                     reservaciones.crearReservacion(
-                            idReservacion, nombreReservacion, dui, tel, cantidadPeople, info,
+                             nombreReservacion, dui, tel, cantidadPeople, info,
                             dateReservationStr, dateOutStr, precioReservacion, estado, imageUrl1);
                 }
 

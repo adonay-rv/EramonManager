@@ -8,8 +8,11 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -135,13 +138,27 @@ public class Reservaciones implements Serializable {
     public void setId(String Id) {
         this.idReservacion = idReservacion;
     }
-    public void crearReservacion(String idReservacion, String nombre, int dui, int tel, int cantidadPersonas, String recursos, String dateReservation, String fechaSalida, double precioReservacion, String estado, String comprobantePago) {
+
+    public void crearReservacion(String nombre, int dui, int tel, int cantidadPersonas, String recursos, String dateReservation, String fechaSalida, double precioReservacion, String estado, String comprobantePago) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reservacionesRef = database.getReference("Reservaciones");
+
+        // Utiliza el nombre como el valor del ID de la reservación
+        String idReservacion = nombre;
 
         Reservaciones reservacion = new Reservaciones(idReservacion, nombre, dui, tel, cantidadPersonas, recursos, dateReservation, fechaSalida, precioReservacion, estado, comprobantePago);
 
         reservacionesRef.child(idReservacion).setValue(reservacion);
+    }
+
+
+    public static void EliminarR(String resourceId) {
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference recursosRef = database.getReference("Reservaciones");
+        String idRecursosAEliminar = resourceId;
+        recursosRef.child(idRecursosAEliminar).removeValue();
+        Log.d(null, resourceId);
     }
     public void actualizarReserva(String idReservacion, String nombreReservacion, int dui, int tel, int cantidadPeople,
                                   String info, String dateReservation, String dateOut, double precioReservacion,
