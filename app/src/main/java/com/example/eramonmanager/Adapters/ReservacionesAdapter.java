@@ -57,12 +57,12 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
             Intent intent = new Intent(context, AddReservationActivity.class);
 
             // Obtiene la posición del elemento clicado
-            int position1 = holder.getAdapterPosition();
+            int positions = holder.getAdapterPosition();
 
             // Verifica si la posición es válida antes de continuar
-            if (position1 != RecyclerView.NO_POSITION) {
+            if (positions != RecyclerView.NO_POSITION) {
                 // Obtiene la Reservacion en la posición dada
-                Reservaciones reservacion = reservasList.get(position1);
+                Reservaciones reservacion = reservasList.get(positions);
 
 
                 // Agrega datos adicionales al intento utilizando pares clave-valor.
@@ -76,7 +76,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
 
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservacion.getId());
-                Log.d("ReservacionAdapter", "Reserva ID: " + position1);
+                Log.d("ReservacionAdapter", "Reserva ID: " + positions);
                 // Inicia la actividad AddReservationActivity con el intento configurado.
                 context.startActivity(intent);
             }
