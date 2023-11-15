@@ -121,7 +121,7 @@ public class Reservaciones {
     }
 
     public void setId(String Id) {
-        this.idReservacion = idReservacion;
+        this.idReservacion = Id;
     }
     public void crearReservacion(String idReservacion, String nombre, int dui, int tel, int cantidadPersonas, String recursos, String dateReservation, String fechaSalida, double precioReservacion, String estado, String comprobantePago) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();

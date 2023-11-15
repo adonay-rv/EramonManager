@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:padding="0dp"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/background_fragment">
+    </ImageView>
+
+    <RelativeLayout
+        android:id="@+id/MainInformation"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:paddingStart="10dp"
+            android:fontFamily="@font/nunito_sans"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="Reserva"
+            android:textSize="30dp">
+        </TextView>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="-1dp"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
+            android:src="@drawable/eramon_logo">
+        </ImageView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/FechaActual"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/nunito_sans"
+        android:layout_height="wrap_content"
+        android:text="Fecha de hoy"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="60dp">
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/CreacionRecibo"
+        android:layout_below="@+id/MainInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_below="@+id/MainInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Código de la reservación : "
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorPrimaryDarkest">
+        </TextView>
+
+        <TextView
+            android:layout_below="@+id/MainInformation"
+            android:id="@+id/CreacionReciboToFirebase"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/nunito_sans"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:text="Numero"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/colorPrimaryDarkest">
+        </TextView>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_Reservation_PDF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/CreacionRecibo"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Paquete de camping"
+                android:fontFamily="@font/nunito_sans"
+                android:textColor="@color/colorPrimaryDarkest"
+                android:textSize="20dp"
+                android:layout_gravity="center">
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Cantidad de personas : "
+                    android:fontFamily="@font/nunito_sans"
+                    android:textSize="15dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/Cant_Personas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_sans"
+                    android:layout_marginTop="5dp"
+                    android:text="Numero"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Fecha de entrada : "
+                    android:layout_marginRight="34dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="6dp"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/FechaEntrada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:text="Fecha"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha de salida : "
+                    android:layout_marginRight="46dp"
+                    android:layout_marginLeft="6dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/FechaSalida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_marginRight="30dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:text="Fecha"
+                    android:textSize="15dp"
+                    android:layout_gravity="center">
+                </TextView>
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_Reservation_SERVICIOS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CreacionRecibo"
+                android:inputType="textMultiLine"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/colorIdicadorMenu"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:background="@null"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:src="@drawable/tent_1">
+                        </ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_sans"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="8dp"
+                            android:text="Servicios incluidos :">
+                        </TextView>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/ServiciosEramon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/black"
+                        android:text="Servicios">
+                    </TextView>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total : "
+                    android:layout_marginRight="46dp"
+                    android:layout_marginLeft="6dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginRight="30dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:text="Numero"
+                    android:textSize="15dp"
+                    android:layout_gravity="center">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/nunito_sans"
+                    android:text="Fuente : ">
+                </TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_sans"
+                    android:textColor="@color/black"
+                    android:text="Eramon Paradise 360">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/pdf_eramon"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/cardView_Reservation_PDF"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/walking">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/NombreCliente"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_sans"
+            android:textColor="@color/black"
+            android:layout_marginRight="10dp"
+            android:text="Nombre">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pdf_reserva_datos"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/pdf_eramon"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_marginTop="6dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/call">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/TelCliente"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_sans"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/black"
+            android:layout_marginRight="10dp"
+            android:text="Telefono">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pdf_reserva_datos_cliente"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/pdf_reserva_datos"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="-3dp"
+            android:src="@drawable/idcard_1">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/NumberId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_sans"
+            android:layout_marginRight="11dp"
+            android:text="Dui">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/divider"
+        android:layout_below="@+id/pdf_reserva_datos_cliente"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="350dp"
+            android:background="@color/colorPrimaryLight"
+            android:layout_height="3dp">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/divider"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Contactos"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorPrimaryDarker"
+            android:textStyle="bold"
+            android:layout_height="match_parent">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/camioneta">
+            </ImageView>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="170dp"
+                android:src="@drawable/tour_guide">
+            </ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:layout_marginLeft="32dp"
+                android:textColor="@color/black"
+                android:text="Encargado del transporte"
+                android:fontFamily="@font/nunito_sans"
+                android:textAlignment="center"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:textColor="@color/black"
+                android:text="Guía"
+                android:fontFamily="@font/nunito_sans"
+                android:textAlignment="center"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:layout_marginLeft="80dp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="Francisco"
+                android:fontFamily="@font/nunito_sans"
+                android:textAlignment="center"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="140dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="Victor"
+                android:fontFamily="@font/nunito_sans"
+                android:textAlignment="center"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:textStyle="bold"
+                android:text="+503 7294 1723"
+                android:fontFamily="@font/nunito_sans"
+                android:textColor="@color/colorPrimaryDarkest"
+                android:textAlignment="center"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:text="+503 7900 5495"
+                android:fontFamily="@font/nunito_sans"
+                android:textColor="@color/colorPrimaryDarkest"
+                android:textAlignment="center"></TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

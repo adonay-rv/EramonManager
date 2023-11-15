@@ -11,5 +11,7 @@
     <color name="colorPrimaryDarkest">#045533</color>
 
     <color name="colorIdicadorMenu">#D0E5DB</color>
+
+    <color name="azul">#F0F8FF</color>
     
 </resources>
