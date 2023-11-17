@@ -35,52 +35,40 @@ public class FragmentReservations extends Fragment {
     private RecyclerView recyclerView;
     private ReservacionesAdapter reservacionesAdapter;
     private List<Reservaciones> reservacionesList;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_reservations, container, false);
-
         addReservations = rootView.findViewById(R.id.Add_Reservation);
-
         recyclerView = rootView.findViewById(R.id.Recyler_View_Reservation);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
         reservacionesList = new ArrayList<>();
         reservacionesAdapter = new ReservacionesAdapter(reservacionesList, requireContext());
         recyclerView.setAdapter(reservacionesAdapter);
-
         // Obtén los datos de Firebase y llénalos en recursosList
         obtenerDatosDeFirebase();
-
         addReservations.setOnClickListener((v) -> {
             Intent intent = new Intent(requireActivity(), AddReservationActivity.class);
             startActivity(intent);
         });
-
         return rootView; // Devuelve la vista rootView que configuraste
     }
-
     private void obtenerDatosDeFirebase() {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Reservaciones");
-
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Reservaciones> nuevasReservacionesList = new ArrayList<>();
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Reservaciones reservacion = snapshot.getValue(Reservaciones.class);
                     if (reservacion != null) {
                         nuevasReservacionesList.add(reservacion);
                     }
                 }
-
                 reservacionesList.clear();
                 reservacionesList.addAll(nuevasReservacionesList);
                 reservacionesAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Manejo de errores

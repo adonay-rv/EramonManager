@@ -79,7 +79,7 @@ public class FragmentHome extends Fragment {
         });
         return viewHome;
     }
-
+    
     // Este método debería retornar todas las reservaciones
     private void obtenerTodasLasReservaciones() {
         // Obtiene una referencia a tu base de datos
@@ -89,6 +89,11 @@ public class FragmentHome extends Fragment {
         DatabaseReference reservacionesRef = mDatabase.child("Reservaciones");
 
         // Agrega un ValueEventListener a la referencia de reservaciones
+        // Inicializa homeAdapter y configura recyclerViewReservaciones aquí
+        homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
+        recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewReservaciones.setAdapter(homeAdapter);
+
         reservacionesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -104,15 +109,13 @@ public class FragmentHome extends Fragment {
                     todasLasReservaciones.add(reserva);
                 }
 
-                // Inicializa homeAdapter y configura recyclerViewReservaciones aquí
-                homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
-                recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerViewReservaciones.setAdapter(homeAdapter);
+                // Notifica al adaptador sobre los cambios de datos
+                homeAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Maneja los errores
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
