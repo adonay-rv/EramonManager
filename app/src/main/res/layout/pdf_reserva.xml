@@ -445,17 +445,21 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginLeft="90dp"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
                 android:src="@drawable/transporte">
             </ImageView>
 
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginLeft="165dp"
+                android:layout_marginEnd="30dp"
+                android:layout_weight="1"
                 android:src="@drawable/tour_guide">
             </ImageView>
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -466,7 +470,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:layout_marginLeft="32dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="Encargado del transporte"
                 android:textAlignment="center"></TextView>
@@ -474,7 +479,8 @@
             <TextView
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="82dp"
+                android:layout_marginEnd="62dp"
+                android:layout_weight="1"
                 android:text="Guía"
                 android:textAlignment="center"
                 android:textColor="@color/black"></TextView>
@@ -489,7 +495,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:layout_marginLeft="80dp"
+                android:layout_marginStart="28dp"
+                android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="Francisco"
                 android:textStyle="bold"
@@ -498,12 +505,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="139dp"
+                android:layout_marginEnd="35dp"
+                android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="Victor"
                 android:textStyle="bold"
                 android:textAlignment="center"></TextView>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -515,7 +524,8 @@
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
                 android:text="+503 7294 1723"
                 android:textColor="@color/colorPrimaryDarkest"
                 android:textAlignment="center"></TextView>
@@ -523,12 +533,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="90dp"
+                android:layout_marginEnd="33dp"
                 android:layout_marginTop="10dp"
+                android:layout_weight="1"
                 android:text="+503 7900 5495"
                 android:textColor="@color/colorPrimaryDarkest"
                 android:textAlignment="center"></TextView>
         </LinearLayout>
+
 
     </LinearLayout>
 

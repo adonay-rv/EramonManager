@@ -83,19 +83,32 @@ public class AddReservationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_reservation);
 
 
-        //titleEditText = findViewById(R.id.Add_Reservation_Name);
-
-
+        boolean editable = getIntent().getBooleanExtra("editable", true);
 
 
         pageTitleTextView = findViewById(R.id.pagetitle);
-titleEditText=findViewById(R.id.Add_Reservation_Name);
-duiedit=findViewById(R.id.Add_Reservation_Dui);
-teledit=findViewById(R.id.Add_Reservation_Tel);
-precoedit=findViewById(R.id.Add_Reservation_ReservationPrice);
-reservacionedit=findViewById(R.id.Add_Reservation_DateReservation);
-salidaedit=findViewById(R.id.Add_Reservation_DateOut);
-cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
+        pageTitleTextView.setEnabled(editable);
+
+        titleEditText=findViewById(R.id.Add_Reservation_Name);
+        titleEditText.setEnabled(editable);
+
+        duiedit=findViewById(R.id.Add_Reservation_Dui);
+        duiedit.setEnabled(editable);
+
+        teledit=findViewById(R.id.Add_Reservation_Tel);
+        teledit.setEnabled(editable);
+
+        precoedit=findViewById(R.id.Add_Reservation_ReservationPrice);
+        precoedit.setEnabled(editable);
+
+        reservacionedit=findViewById(R.id.Add_Reservation_DateReservation);
+        reservacionedit.setEnabled(editable);
+
+        salidaedit=findViewById(R.id.Add_Reservation_DateOut);
+        salidaedit.setEnabled(editable);
+
+        cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
+        cantidadedit.setEnabled(editable);
 
 
         //receive data
@@ -109,6 +122,7 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
         String fechareservacion = getIntent().getStringExtra("reservacion");
         String fechasalida = getIntent().getStringExtra("salida");
         String docId = getIntent().getStringExtra("docId");
+        String recursos = getIntent().getStringExtra("recursos");
 
 
         titleEditText.setText(title);
@@ -121,8 +135,11 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
         Log.d("AddReservationActivity", "docId: " + title);
 
         estadoR = findViewById(R.id.radioGroupStatus);
+        estadoR.setEnabled(editable);
         RadioButton radioButtonCancelled = findViewById(R.id.radioButtonCancelled);
+        radioButtonCancelled.setEnabled(editable);
         RadioButton radioButtonPending = findViewById(R.id.radioButtonPending);
+        radioButtonPending.setEnabled(editable);
 
 // Recuperar el estado de la intención
         String estado = getIntent().getStringExtra("estado");
@@ -158,7 +175,10 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
 
 
         chipGroup = findViewById(R.id.ChipGroupResources);
+        chipGroup.setEnabled(editable);
+
         seleccionarButton = findViewById(R.id.SelectResources);
+        seleccionarButton.setEnabled(editable);
 
         options = getResources().getStringArray(R.array.resource_array);
         selectedOptions = new boolean[options.length];
@@ -266,6 +286,7 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
             public void onResultado(List<String> nombresRecursos) {
                 // Actualiza la variable 'options' con los nombres de recursos obtenidos
                 options = nombresRecursos.toArray(new String[0]);
+
             }
         });
     }
@@ -322,6 +343,7 @@ cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
             EditText editText = optionView.findViewById(R.id.dialogEditText);
 
             if (!editText.getText().toString().isEmpty()) {
+                editText.setEnabled(false);
                 Chip dynamicChip = new Chip(this);
                 dynamicChip.setText(options[i] + " -Cant. " + editText.getText().toString());
                 info += options[i] + " -Cant. " + editText.getText().toString() + ", ";

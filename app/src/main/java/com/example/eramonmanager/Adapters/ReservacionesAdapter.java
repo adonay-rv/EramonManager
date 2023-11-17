@@ -5,6 +5,7 @@ import static com.example.eramonmanager.Activity.Reservaciones.EliminarR;
 
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,8 +13,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,14 +44,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+//Enlazar datos de las reservaciones con el recyclerview
 public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdapter.ReservacionesViewHolder> {
+    //Permiso de escritura en el almacenamiento externo
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    //Permiso de administracion del almacenamiento externo
+    private static final int MY_PERMISSIONS_REQUEST_MANAGE_EXTERNAL_STORAGE = 2;
+    //Datos que el adapter utilizara para llenar el RecyclerView
     private List<Reservaciones> reservasList;
     private Context context;
 
@@ -120,17 +130,48 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
         holder.pdfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                    //Cuando el permiso no ha sido concedido, debe solicitarse
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                }else{
-                    //Si el permiso ya ha sido concedido, procede a crearse el archivo pdf
-                    GenerarPDF(reservas);
+                //Comprueba la version del sistema operativo, si es android 11 o superior
+                //Verfifica si tiene el permiso para administrar el almacenamiento externo
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    //verifica si la app tiene permiso en android 11 o superior
+                    if (Environment.isExternalStorageManager()) {
+                        try {
+                            GenerarPDF(reservas);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        //verifica que se obtenga el permiso si aun no se tiene
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                        intent.setData(uri);
+                        ((Activity) context).startActivityForResult(intent, MY_PERMISSIONS_REQUEST_MANAGE_EXTERNAL_STORAGE);
+                    }
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        //verifican si se tiene permiso en android 6.0 o superior, pero inferior a android 11
+                        try {
+                            GenerarPDF(reservas);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        //solicita permiso de escritura
+                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                    }
+                } else {
+                    try {
+                        //Genera el pdf
+                        GenerarPDF(reservas);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
     }
-    private void GenerarPDF(Reservaciones reservaciones){
+
+    private void GenerarPDF(Reservaciones reservaciones) throws IOException {
 
         //Se infla el layout XML
         View view = LayoutInflater.from(context).inflate(R.layout.pdf_reserva, null);
@@ -167,7 +208,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             context.getDisplay().getRealMetrics(displayMetrics);
-        }else
+        } else
             ((Activity) context).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
         view.measure(View.MeasureSpec.makeMeasureSpec(displayMetrics.widthPixels, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(displayMetrics.heightPixels, View.MeasureSpec.EXACTLY));
@@ -178,7 +219,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
         PdfDocument pdfDocument = new PdfDocument();
 
         //Obtener el width y el height de la vista
-        int viewWidth  = view.getMeasuredWidth();
+        int viewWidth = view.getMeasuredWidth();
         int viewHeight = view.getMeasuredHeight();
 
         //Crear un PageInfo
@@ -201,20 +242,40 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
         pdfDocument.finishPage(page);
 
         //Guardar el documento en un archivo
-        String directoryPath = Environment.getExternalStorageDirectory().toString();
-        File file = new File(directoryPath, "Reservas_EramonParadise360" + reservaciones.getNombre() + ".pdf");
-        try{
-            pdfDocument.writeTo(new FileOutputStream(file));
-            Toast.makeText(context, "PDF generado en: " + file.getPath(), Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            Toast.makeText(context, "Error al generar el PDF" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //Verifica la version del sistema operativo y ejecuta bloques de codigo segun
 
-        //Cerrar el documento
-        pdfDocument.close();
+            // Para Android 10 y superior
+            //Crea duplicados
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Files.FileColumns.DISPLAY_NAME, "Reservas_EramonParadise360" + reservaciones.getNombre() + ".pdf");
+            values.put(MediaStore.Files.FileColumns.MIME_TYPE, "application/pdf");
+            values.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+
+            Uri uri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+            //Inserta el archivo en el almacenamiento del dispositivo
+
+            //Abre el OutputStream
+            OutputStream outputStream = context.getContentResolver().openOutputStream(uri);
+            pdfDocument.writeTo(outputStream);
+            outputStream.close();
+
+            //Ruta del archivo generado
+            Toast.makeText(context, "PDF generado en: " + uri.getPath(), Toast.LENGTH_SHORT).show();
+        } else {
+
+            // Para Android 9 y versiones anteriores
+            //Sobreescribe documentos
+            //Obtiene la ruta del directorio de descarga
+            String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+            File file = new File(directoryPath, "Reservas_EramonParadise360" + reservaciones.getNombre() + ".pdf");
+            pdfDocument.writeTo(new FileOutputStream(file));
+            //Crea un nuevo objeto file
+
+            Toast.makeText(context, "PDF generado en: " + file.getPath(), Toast.LENGTH_SHORT).show();
+        }
     }
+
 
 
     @Override
