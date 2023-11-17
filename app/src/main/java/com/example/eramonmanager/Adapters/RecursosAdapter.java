@@ -24,6 +24,14 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
     private List<Recursos> recursosList;
     private Context context;
 
+    // Constructor y otros métodos del adaptador
+
+    // Método para filtrar la lista de recursos
+    public void filterList(List<Recursos> filteredList) {
+        recursosList = filteredList;
+        notifyDataSetChanged();
+    }
+
     public RecursosAdapter(List<Recursos> recursosList, Context context) {
         this.recursosList = recursosList;
         this.context = context;
