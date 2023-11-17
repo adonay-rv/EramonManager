@@ -1,19 +1,16 @@
-package com.example.eramonmanager.Adapters;
 
+package com.example.eramonmanager.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.eramonmanager.Activity.AddReservationActivity;
 import com.example.eramonmanager.Activity.Reservaciones;
-import com.example.eramonmanager.Fragment.FragmentHome;
 import com.example.eramonmanager.R;
 
 import java.util.List;
@@ -40,7 +37,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         holder.txtNameCalendar.setText(reservaciones.getNombre());
         holder.txtDateCalendar.setText(reservaciones.getDateReservation());
-       // holder.Button_AddReservation.setVisibility(View.GONE);
+        // holder.Button_AddReservation.setVisibility(View.GONE);
 
         holder.itemView.setOnClickListener((v) -> {
             // Crea un nuevo intento que especifica el contexto actual y la clase de destino (AddReservationActivity).

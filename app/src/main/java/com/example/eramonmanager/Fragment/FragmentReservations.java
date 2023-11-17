@@ -32,7 +32,6 @@ import java.util.List;
 public class FragmentReservations extends Fragment {
 
     private FloatingActionButton addReservations;
-    private FloatingActionButton addRecurso;
     private RecyclerView recyclerView;
     private ReservacionesAdapter reservacionesAdapter;
     private List<Reservaciones> reservacionesList;

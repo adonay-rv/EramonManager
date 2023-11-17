@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 
 import com.example.eramonmanager.Activity.Recursos.MostrarRecursosCallback;
+import com.example.eramonmanager.Adapters.HomeAdapter;
 import com.example.eramonmanager.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -48,7 +49,7 @@ public class AddReservationActivity extends AppCompatActivity {
     private String imageUrl1;
     private static final int PICK_IMAGE_REQUEST1 = 1;
     private Button imageButton1;
-   private TextView pageTitleTextView;
+    static TextView pageTitleTextView;
     boolean isEditMode = false;
 
     EditText titleEditText,teledit,duiedit,cantidadedit,reservacionedit,salidaedit,precoedit;
@@ -87,7 +88,6 @@ public class AddReservationActivity extends AppCompatActivity {
 
 
         pageTitleTextView = findViewById(R.id.pagetitle);
-        pageTitleTextView.setEnabled(editable);
 
         titleEditText=findViewById(R.id.Add_Reservation_Name);
         titleEditText.setEnabled(editable);
@@ -110,10 +110,7 @@ public class AddReservationActivity extends AppCompatActivity {
         cantidadedit=  findViewById(R.id.Add_Reservation_AmountPeople);
         cantidadedit.setEnabled(editable);
 
-
         //receive data
-
-
         String title = getIntent().getStringExtra("title");
         int dui = getIntent().getIntExtra("dui", 0);  // 0 es el valor predeterminado si "dui" no está presente
         int tel = getIntent().getIntExtra("tel", 0);  // 0 es el valor predeterminado si "tel" no está presente
@@ -175,7 +172,6 @@ public class AddReservationActivity extends AppCompatActivity {
 
 
         chipGroup = findViewById(R.id.ChipGroupResources);
-        chipGroup.setEnabled(editable);
 
         seleccionarButton = findViewById(R.id.SelectResources);
         seleccionarButton.setEnabled(editable);
@@ -197,8 +193,23 @@ public class AddReservationActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
 
         imageButton1 = findViewById(R.id.Button_UploadPhoto);
+        imageButton1.setEnabled(editable);
+
+        if(editable == false){
+            imageButton1.setVisibility(View.GONE);
+        }else{
+            imageButton1.setVisibility(View.VISIBLE);
+        }
 
         Button button1 = findViewById(R.id.Button_AddReservation);
+        button1.setEnabled(editable);
+
+        if(editable == false){
+            button1.setVisibility(View.GONE);
+        }else{
+            button1.setVisibility(View.VISIBLE);
+        }
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,7 +271,13 @@ public class AddReservationActivity extends AppCompatActivity {
 
 
         seleccionarButton = findViewById(R.id.SelectResources);
+        seleccionarButton.setEnabled(editable);
 
+        if(editable == false){
+            seleccionarButton.setVisibility(View.GONE);
+        }else{
+            seleccionarButton.setVisibility(View.VISIBLE);
+        }
 
         selectedOptions = new boolean[options.length];
 
@@ -279,6 +296,7 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         });
     }
+
     private void obtenerNombresRecursos() {
         Recursos recursos = new Recursos();
         recursos.mostrarRecursos(new Recursos.MostrarRecursosCallback() {
@@ -339,17 +357,15 @@ public class AddReservationActivity extends AppCompatActivity {
 
         for (int i = 0; i < options.length; i++) {
             View optionView = optionViews.get(i);
-            TextView optionTextView = optionView.findViewById(R.id.dialogOptionTextView);
             EditText editText = optionView.findViewById(R.id.dialogEditText);
 
             if (!editText.getText().toString().isEmpty()) {
-                editText.setEnabled(false);
                 Chip dynamicChip = new Chip(this);
                 dynamicChip.setText(options[i] + " -Cant. " + editText.getText().toString());
-                info += options[i] + " -Cant. " + editText.getText().toString() + ", ";
+                info += options[i] + " -Cant. " + editText.getText().toString() + " ";
                 dynamicChip.setCloseIconVisible(true);
                 dynamicChip.setCheckable(false);
-                final int position = i;
+                //final int position = i;
                 dynamicChip.setOnCloseIconClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
