@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class FragmentReservations extends Fragment {
     private List<Reservaciones> reservacionesList;
 
     //Buscador
-    SearchView SearchView_Reservation1;
+    SearchView BuscarReservacion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,21 +48,24 @@ public class FragmentReservations extends Fragment {
         recyclerView = rootView.findViewById(R.id.Recyler_View_Reservation);
 
         //Buscador
-        SearchView_Reservation1 = rootView.findViewById(R.id.SearchView_Reservation);
+        BuscarReservacion = rootView.findViewById(R.id.SearchView_Reservation);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         reservacionesList = new ArrayList<>();
         reservacionesAdapter = new ReservacionesAdapter(reservacionesList, requireContext());
         recyclerView.setAdapter(reservacionesAdapter);
-        // Obtén los datos de Firebase y llénalos en recursosList
+
+        // Datos de Firebase en recursosList
         obtenerDatosDeFirebase();
         addReservations.setOnClickListener((v) -> {
             Intent intent = new Intent(requireActivity(), AddReservationActivity.class);
             startActivity(intent);
         });
-        return rootView; // Devuelve la vista rootView que configuraste
+
+        return rootView;
     }
+
     private void obtenerDatosDeFirebase() {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Reservaciones");
         databaseRef.addValueEventListener(new ValueEventListener() {
