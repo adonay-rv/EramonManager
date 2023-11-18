@@ -329,7 +329,7 @@
                             android:textSize="18dp"
                             android:fontFamily="@font/nunito_sans"
                             android:layout_marginTop="5dp"
-                            android:layout_marginStart="35dp"
+                            android:layout_marginStart="25dp"
                             app:buttonTint="@color/colorPrimaryLight"/>
 
                     </RadioGroup>
@@ -377,7 +377,7 @@
         android:textSize="18dp"
         android:fontFamily="@font/nunito_sans"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-20dp"
+        android:layout_marginTop="-10dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/colorPrimaryDarkest"
         android:layout_below="@+id/cardView_Reservation"

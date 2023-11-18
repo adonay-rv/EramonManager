@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.eramonmanager.Activity.Recursos.MostrarRecursosCallback;
@@ -119,7 +120,6 @@ public class AddReservationActivity extends AppCompatActivity {
         String fechareservacion = getIntent().getStringExtra("reservacion");
         String fechasalida = getIntent().getStringExtra("salida");
         String docId = getIntent().getStringExtra("docId");
-        String recursos = getIntent().getStringExtra("recursos");
 
 
         titleEditText.setText(title);
@@ -138,10 +138,10 @@ public class AddReservationActivity extends AppCompatActivity {
         RadioButton radioButtonPending = findViewById(R.id.radioButtonPending);
         radioButtonPending.setEnabled(editable);
 
-// Recuperar el estado de la intención
+        // Recuperar el estado de la intención
         String estado = getIntent().getStringExtra("estado");
 
-// Establecer el estado en el RadioButton correspondiente
+        // Establecer el estado en el RadioButton correspondiente
         if (estado != null) {
             if (estado.equals("Cancelado")) {
                 radioButtonCancelled.setChecked(true);
@@ -150,31 +150,48 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         }
 
-
-
-
-
-
-
         if(title!=null && !title.isEmpty()){
             isEditMode = true;
         }
 
+        //Modificacion del titulo de la activity segun corresponda
+        Intent intent = getIntent();
+        boolean viewDetails = intent.getBooleanExtra("viewDetails", false);
 
+        if (isEditMode == false) {
+            pageTitleTextView.setText("Agregar Reservación");
+        } else if (viewDetails) {
+            pageTitleTextView.setText("Detalles de Reservación");
+        } else{
+            pageTitleTextView.setText("Editar Reservación");
+        }
 
-        if(isEditMode){
-            pageTitleTextView.setText("Editar Reservaciones");
+        //Obtener los recursos seleccionados para volver a mostrarlos
+        chipGroup = findViewById(R.id.ChipGroupResources);
 
+        String recursos = getIntent().getStringExtra("recursos");
+
+        if (recursos != null) {
+            String[] opciones = recursos.split(" ");
+
+            for (int i = 0; i < opciones.length; i += 3) {
+                if (i + 2 < opciones.length) {
+                    String opcion = opciones[i] + " " + opciones[i+1] + " " + opciones[i+2];
+                    Chip chip = new Chip(this);
+                    chip.setText(opcion);
+                    chip.setClickable(false);
+                    chipGroup.addView(chip);
+                } else {
+                    // Muestra un mensaje al usuario
+                    Toast.makeText(this, "Error de formato", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
 
 
 
-
-
-        chipGroup = findViewById(R.id.ChipGroupResources);
-
         seleccionarButton = findViewById(R.id.SelectResources);
-        seleccionarButton.setEnabled(editable);
+        //seleccionarButton.setEnabled(editable);
 
         options = getResources().getStringArray(R.array.resource_array);
         selectedOptions = new boolean[options.length];
@@ -202,7 +219,6 @@ public class AddReservationActivity extends AppCompatActivity {
         }
 
         Button button1 = findViewById(R.id.Button_AddReservation);
-        button1.setEnabled(editable);
 
         if(editable == false){
             button1.setVisibility(View.GONE);
@@ -261,17 +277,7 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
-
-
         seleccionarButton = findViewById(R.id.SelectResources);
-        seleccionarButton.setEnabled(editable);
 
         if(editable == false){
             seleccionarButton.setVisibility(View.GONE);
@@ -354,6 +360,7 @@ public class AddReservationActivity extends AppCompatActivity {
 
     private void updateChipGroup(List<View> optionViews) {
         chipGroup.removeAllViews();
+        info = ""; //Limpiar la variable info antes de agregarle nuevas opciones
 
         for (int i = 0; i < options.length; i++) {
             View optionView = optionViews.get(i);
@@ -361,11 +368,10 @@ public class AddReservationActivity extends AppCompatActivity {
 
             if (!editText.getText().toString().isEmpty()) {
                 Chip dynamicChip = new Chip(this);
-                dynamicChip.setText(options[i] + " -Cant. " + editText.getText().toString());
-                info += options[i] + " -Cant. " + editText.getText().toString() + " ";
+                dynamicChip.setText(options[i] + " -cantidad " + editText.getText().toString());
+                info += options[i] + " -cantidad " + editText.getText().toString() + " ";
                 dynamicChip.setCloseIconVisible(true);
                 dynamicChip.setCheckable(false);
-                //final int position = i;
                 dynamicChip.setOnCloseIconClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -376,6 +382,10 @@ public class AddReservationActivity extends AppCompatActivity {
                 chipGroup.addView(dynamicChip);
             }
         }
+
+        //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
+        Reservaciones reservacion = new Reservaciones();
+        reservacion.setRescursos(info);
     }
 
 

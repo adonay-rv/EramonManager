@@ -59,17 +59,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 intent.putExtra("reservacion", reservacion.getDateReservation());
                 intent.putExtra("precio", reservacion.getPrecioReservacion());
                 intent.putExtra("salida", reservacion.getFechaSalida());
+
+                //Obtiene los recursos seleccionados para mostrarlos
                 intent.putExtra("recursos", reservacion.getRescursos());
                 intent.putExtra("estado", reservacion.getEstado());
                 intent.putExtra("editable", false);
+                intent.putExtra("viewDetails", true);
+
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservacion.getId());
-
-                // Muestra el ID de la reserva en los logs
-                Log.d("ReservacionAdapter", "Reserva ID: " + reservacion.getId());
-
-                //holder.button_AddReservation.setVisibility(View.GONE);
-                //holder.detalles.setText("Detalles de reservacion");
 
                 // Inicia la actividad AddReservationActivity con el intento configurado.
                 context.startActivity(intent);
