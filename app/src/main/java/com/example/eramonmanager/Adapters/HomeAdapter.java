@@ -65,6 +65,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 intent.putExtra("estado", reservacion.getEstado());
                 intent.putExtra("editable", false);
                 intent.putExtra("viewDetails", true);
+                intent.putExtra("viewHistorial", true);
 
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservacion.getId());

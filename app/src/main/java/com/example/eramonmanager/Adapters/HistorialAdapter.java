@@ -65,6 +65,7 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
                 intent.putExtra("recursos", reservas.getRescursos());
                 intent.putExtra("estado", reservas.getEstado());
                 intent.putExtra("editable", false);
+                intent.putExtra("viewHistorial", true);
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservas.getId());
 

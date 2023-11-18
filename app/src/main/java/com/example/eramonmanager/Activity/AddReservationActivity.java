@@ -76,6 +76,8 @@ public class AddReservationActivity extends AppCompatActivity {
         }
 
 
+
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,14 +159,13 @@ public class AddReservationActivity extends AppCompatActivity {
         boolean viewDetails = intent.getBooleanExtra("viewDetails", false);
         boolean viewHistorial = intent.getBooleanExtra("viewHistorial", false);
 
-
         if (isEditMode == false) {
             pageTitleTextView.setText("Agregar Reservación");
         } else if (viewDetails) {
             pageTitleTextView.setText("Detalles de Reservación");
-        } else if(viewHistorial){
+        }else if (viewHistorial) {
             pageTitleTextView.setText("Historial");
-    } else{
+        } else{
             pageTitleTextView.setText("Editar Reservación");
         }
 

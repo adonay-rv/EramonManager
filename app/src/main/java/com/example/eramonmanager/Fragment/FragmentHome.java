@@ -43,13 +43,14 @@ public class FragmentHome extends Fragment {
         // Inflate the layout for this fragment
         View viewHome = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //Capturar la fecha actual
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-        String fechaHoy = simpleDateFormat.format(new Date());
-
         calendarView_Item = viewHome.findViewById(R.id.calendarView);
         recyclerViewReservaciones = viewHome.findViewById(R.id.recyclerViewReservaciones);
         textdate = viewHome.findViewById(R.id.TextView_Date);
+
+        //Capturar la fecha actual
+        SimpleDateFormat fecha_fechaActual = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+        String fechaActual = fecha_fechaActual.format(new Date());
+        textdate.setText(fechaActual);
 
         // Inicializa todasLasReservaciones y homeAdapter aquí
         todasLasReservaciones = new ArrayList<>();
@@ -72,11 +73,17 @@ public class FragmentHome extends Fragment {
                     }
                 }
 
-                // Actualiza el RecyclerView con las reservaciones filtradas
-                homeAdapter.setReservaciones(reservacionesFiltradas);
-                homeAdapter.notifyDataSetChanged();
+                // Verifica si hay reservaciones para la fecha seleccionada
+                if (reservacionesFiltradas.isEmpty()) {
+                    // Muestra un mensaje al usuario
+                    Toast.makeText(getContext(), "No existen reservaciones para la fecha: " + FechaSeleccionada, Toast.LENGTH_SHORT).show();
+                } else {
+                    // Actualiza el RecyclerView con las reservaciones filtradas
+                    homeAdapter.setReservaciones(reservacionesFiltradas);
+                    homeAdapter.notifyDataSetChanged();
+                }
 
-                Toast.makeText(getContext(), "Fecha: " + FechaSeleccionada, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Fecha: " + FechaSeleccionada, Toast.LENGTH_SHORT).show();
                 textdate.setText(FechaSeleccionada);
             }
         });
