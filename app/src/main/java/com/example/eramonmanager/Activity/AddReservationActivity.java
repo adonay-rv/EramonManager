@@ -76,8 +76,6 @@ public class AddReservationActivity extends AppCompatActivity {
         }
 
 
-
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,12 +155,16 @@ public class AddReservationActivity extends AppCompatActivity {
         //Modificacion del titulo de la activity segun corresponda
         Intent intent = getIntent();
         boolean viewDetails = intent.getBooleanExtra("viewDetails", false);
+        boolean viewHistorial = intent.getBooleanExtra("viewHistorial", false);
+
 
         if (isEditMode == false) {
             pageTitleTextView.setText("Agregar Reservación");
         } else if (viewDetails) {
             pageTitleTextView.setText("Detalles de Reservación");
-        } else{
+        } else if(viewHistorial){
+            pageTitleTextView.setText("Historial");
+    } else{
             pageTitleTextView.setText("Editar Reservación");
         }
 
