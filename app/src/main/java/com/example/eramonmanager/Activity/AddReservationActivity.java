@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +25,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -119,7 +125,77 @@ public class AddReservationActivity extends AppCompatActivity {
         double precio = getIntent().getDoubleExtra("precio", 0.0);  // 0.0 es el valor predeterminado si "precio" no está presente
         String fechareservacion = getIntent().getStringExtra("reservacion");
         String fechasalida = getIntent().getStringExtra("salida");
-        String docId = getIntent().getStringExtra("docId");
+        //String docId = getIntent().getStringExtra("docId");
+
+        reservacionedit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //Fecha actual
+                final Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                //Creacion de un DatePicketDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddReservationActivity.this, new DatePickerDialog.OnDateSetListener(){
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int mes, int dia) {
+                        //Se selecciona una fecha que se incorporara al editext
+                        reservacionedit.setText(dia + "/" + (mes + 1) + "/" + year); //formato de la fecha
+                    }
+                }, year, month, day);
+
+                // la fecha actual como fecha mínima
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                //Toast.makeText(AddReservationActivity.this, "No se puede seleccionar una fecha anterior", Toast.LENGTH_SHORT).show();
+
+                datePickerDialog.show();
+            }
+        });
+
+        salidaedit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                    //Fecha actual
+                    final Calendar cal = Calendar.getInstance();
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                    //Creacion de un DatePicketDialog
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(AddReservationActivity.this, new DatePickerDialog.OnDateSetListener(){
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int mes, int dia) {
+                            //Se selecciona una fecha que se incorporara al editext
+                            salidaedit.setText(dia + "/" + (mes + 1) + "/" + year); //formato de la fecha
+                        }
+                    }, year, month, day);
+
+                    //Obtener la fecha de reservacionedit y convertirla a milisegundos
+                    String reserva = reservacionedit.getText().toString();
+                    SimpleDateFormat ObtenerFecha = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date date = ObtenerFecha.parse(reserva);
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.set(Calendar.HOUR_OF_DAY, 0);
+                        c.set(Calendar.MINUTE, 0);
+                        c.set(Calendar.SECOND, 0);
+                        c.set(Calendar.MILLISECOND, 0);
+                        long millis = c.getTimeInMillis();
+
+                        //Establecer la fecha mínima como el inicio del día de la fecha de reservacionedit
+                        datePickerDialog.getDatePicker().setMinDate(millis);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Mostrar un mensaje al usuario
+                    //Toast.makeText(AddReservationActivity.this, "No puedes seleccionar una fecha anterior a la fecha de reserva", Toast.LENGTH_LONG).show();
+
+                    datePickerDialog.show();
+                }
+        });
 
 
         titleEditText.setText(title);

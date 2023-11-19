@@ -47,12 +47,12 @@ public class FragmentHome extends Fragment {
         recyclerViewReservaciones = viewHome.findViewById(R.id.recyclerViewReservaciones);
         textdate = viewHome.findViewById(R.id.TextView_Date);
 
-        //Capturar la fecha actual
+        //Captura la fecha actual
         SimpleDateFormat fecha_fechaActual = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
         String fechaActual = fecha_fechaActual.format(new Date());
         textdate.setText(fechaActual);
 
-        // Inicializa todasLasReservaciones y homeAdapter aquí
+        // Inicializa todasLasReservaciones y homeAdapter
         todasLasReservaciones = new ArrayList<>();
         obtenerTodasLasReservaciones();
         homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
@@ -63,7 +63,7 @@ public class FragmentHome extends Fragment {
         calendarView_Item.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int Year, int Month, int Day) {
-                String FechaSeleccionada = String.format("%02d%02d%d", (Month + 1), Day, Year);
+                String FechaSeleccionada = String.format(Day + "/" + (Month + 1) + "/" + Year);
 
                 // Filtra las reservaciones que coinciden con la fecha seleccionada
                 List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
@@ -75,7 +75,6 @@ public class FragmentHome extends Fragment {
 
                 // Verifica si hay reservaciones para la fecha seleccionada
                 if (reservacionesFiltradas.isEmpty()) {
-                    // Muestra un mensaje al usuario
                     Toast.makeText(getContext(), "No existen reservaciones para la fecha: " + FechaSeleccionada, Toast.LENGTH_SHORT).show();
                 } else {
                     // Actualiza el RecyclerView con las reservaciones filtradas
@@ -90,16 +89,16 @@ public class FragmentHome extends Fragment {
         return viewHome;
     }
     
-    // Este método debería retornar todas las reservaciones
+    // Este método retorna todas las reservaciones
     private void obtenerTodasLasReservaciones() {
-        // Obtiene una referencia a tu base de datos
+        // Obtiene una referencia a la base de datos
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Obtiene una referencia a la colección de reservaciones
         DatabaseReference reservacionesRef = mDatabase.child("Reservaciones");
 
         // Agrega un ValueEventListener a la referencia de reservaciones
-        // Inicializa homeAdapter y configura recyclerViewReservaciones aquí
+        // Inicializa homeAdapter y configura recyclerViewReservaciones
         homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
         recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewReservaciones.setAdapter(homeAdapter);
@@ -112,7 +111,7 @@ public class FragmentHome extends Fragment {
 
                 // Itera sobre los hijos del DataSnapshot
                 for (DataSnapshot reservaSnapshot : dataSnapshot.getChildren()) {
-                    // Deserializa el DataSnapshot en un objeto ReservaDB
+                    // Deserializa el DataSnapshot en un objeto Reservaciones
                     Reservaciones reserva = reservaSnapshot.getValue(Reservaciones.class);
 
                     // Añade la reservación a la lista
