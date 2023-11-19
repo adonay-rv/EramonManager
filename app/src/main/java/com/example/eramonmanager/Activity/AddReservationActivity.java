@@ -150,7 +150,7 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         }
 
-        if(title!=null && !title.isEmpty()){
+        if(docId!=null && !docId.isEmpty()){
             isEditMode = true;
         }
 
@@ -181,7 +181,20 @@ public class AddReservationActivity extends AppCompatActivity {
             for (String opcion : opciones) {
                 Chip chip = new Chip(this);
                 chip.setText(opcion);
-                chip.setClickable(false);
+
+                // Verifica si estás en modo de edición
+                if (editable) {
+                    // Configura un listener para eliminar el chip cuando se hace clic
+                    chip.setClickable(true);
+                   chip.setCloseIconVisible(true);
+                    chip.setOnClickListener(view -> {
+                        chipGroup.removeView(chip);
+                        // Agrega aquí la lógica adicional para eliminar el recurso de la base de datos o donde sea necesario
+                    });
+                } else {
+                    chip.setClickable(false);
+                }
+
                 chipGroup.addView(chip);
             }
         }
@@ -259,7 +272,7 @@ public class AddReservationActivity extends AppCompatActivity {
 
                     // Modo de edición: Actualizar la reserva existente
                     reservaciones.actualizarReserva(
-                            title, nombreReservacion, dui, tel, cantidadPeople, info,
+                            docId, nombreReservacion, dui, tel, cantidadPeople, info,
                             dateReservationStr, dateOutStr, precioReservacion, estado, imageUrl1);
                 } else {
                     // Modo de creación: Crear una nueva reserva
@@ -385,11 +398,11 @@ public class AddReservationActivity extends AppCompatActivity {
         Reservaciones reservacion = new Reservaciones();
         reservacion.setRescursos(info);
     }
-
-
-    //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
+        //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
         Reservaciones reservacion = new Reservaciones();
         reservacion.setRescursos(info);
+
+
     }
 
 

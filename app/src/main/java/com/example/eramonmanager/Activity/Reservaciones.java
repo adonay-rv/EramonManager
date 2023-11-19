@@ -143,11 +143,12 @@ public class Reservaciones implements Serializable {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reservacionesRef = database.getReference("Reservaciones");
 
-        // Utiliza el nombre como el valor del ID de la reservación
-        String idReservacion = nombre;
+        // Utiliza push() para generar un ID único
+        String idReservacion = reservacionesRef.push().getKey();
 
         Reservaciones reservacion = new Reservaciones(idReservacion, nombre, dui, tel, cantidadPersonas, recursos, dateReservation, fechaSalida, precioReservacion, estado, comprobantePago);
 
+        // Guarda la reservación con el ID generado
         reservacionesRef.child(idReservacion).setValue(reservacion);
     }
 
@@ -172,11 +173,12 @@ public class Reservaciones implements Serializable {
         reservaMap.put("dui", dui);
         reservaMap.put("tel", tel);
         reservaMap.put("cantidadPersonas", cantidadPeople);
-        reservaMap.put("info", info);
+        reservaMap.put("recursos", info);
         reservaMap.put("dateReservation", dateReservation);
         reservaMap.put("dateOut", dateOut);
         reservaMap.put("precioReservacion", precioReservacion);
         reservaMap.put("estado", estado);
+
         reservaMap.put("imageUrl", imageUrl);
 
         // Actualiza los valores en la base de datos
