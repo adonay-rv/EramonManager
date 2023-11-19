@@ -175,23 +175,16 @@ public class AddReservationActivity extends AppCompatActivity {
         String recursos = getIntent().getStringExtra("recursos");
 
         if (recursos != null) {
-            String[] opciones = recursos.split(" ");
+            // Divide la cadena de recursos en cada recurso individual
+            String[] opciones = recursos.split("  ");
 
-            for (int i = 0; i < opciones.length; i += 3) {
-                if (i + 2 < opciones.length) {
-                    String opcion = opciones[i] + " " + opciones[i+1] + " " + opciones[i+2];
-                    Chip chip = new Chip(this);
-                    chip.setText(opcion);
-                    chip.setClickable(false);
-                    chipGroup.addView(chip);
-                } else {
-                    // Muestra un mensaje al usuario
-                    Toast.makeText(this, "Error de formato", Toast.LENGTH_SHORT).show();
-                }
+            for (String opcion : opciones) {
+                Chip chip = new Chip(this);
+                chip.setText(opcion);
+                chip.setClickable(false);
+                chipGroup.addView(chip);
             }
         }
-
-
 
         seleccionarButton = findViewById(R.id.SelectResources);
         //seleccionarButton.setEnabled(editable);
@@ -371,8 +364,10 @@ public class AddReservationActivity extends AppCompatActivity {
 
             if (!editText.getText().toString().isEmpty()) {
                 Chip dynamicChip = new Chip(this);
-                dynamicChip.setText(options[i] + " -cantidad " + editText.getText().toString());
-                info += options[i] + " -cantidad " + editText.getText().toString() + " ";
+                dynamicChip.setText(options[i] + " | cantidad " + editText.getText().toString());
+
+                // Delimitador "#" al final de cada recurso, sin espacios adicionales
+                info += options[i] + " | cantidad " + editText.getText().toString() + "  ";
                 dynamicChip.setCloseIconVisible(true);
                 dynamicChip.setCheckable(false);
                 dynamicChip.setOnCloseIconClickListener(new View.OnClickListener() {
@@ -384,9 +379,15 @@ public class AddReservationActivity extends AppCompatActivity {
                 });
                 chipGroup.addView(dynamicChip);
             }
-        }
 
-        //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
+
+    //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
+        Reservaciones reservacion = new Reservaciones();
+        reservacion.setRescursos(info);
+    }
+
+
+    //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
         Reservaciones reservacion = new Reservaciones();
         reservacion.setRescursos(info);
     }
