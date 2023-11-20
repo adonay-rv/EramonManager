@@ -665,7 +665,7 @@ public class AddReservationActivity extends AppCompatActivity {
                 year, month, day
         );
 
-        // Configurar la fecha mínima (opcional, ajusta según tus necesidades)
+        // Configurar la fecha mínima
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -741,7 +741,7 @@ public class AddReservationActivity extends AppCompatActivity {
                 year, month, day
         );
 
-        // Configurar la fecha mínima (opcional, ajusta según tus necesidades)
+        // Configurar la fecha mínima
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -784,18 +784,21 @@ public class AddReservationActivity extends AppCompatActivity {
                         final Calendar selectedCalendar = Calendar.getInstance();
                         selectedCalendar.set(year, month, day, hourOfDay, minute);
 
-                        // Obtener la hora de dateReservationEditText
+                        // Obtener la fecha y hora de dateReservationEditText
                         String reservationDateTime = dateReservationEditText.getText().toString();
                         Calendar reservationCalendar = parseDateTime(reservationDateTime);
 
-                        // Verificar si la hora seleccionada es futura y diferente de la hora de dateReservationEditText
+                        // Verificar si la hora seleccionada es futura y al menos una hora después de la hora en dateReservationEditText
+                        Calendar minAllowedTime = (Calendar) reservationCalendar.clone();
+                        minAllowedTime.add(Calendar.HOUR, 1);
+
                         if (selectedCalendar.getTimeInMillis() > System.currentTimeMillis() &&
-                                (reservationCalendar == null || !isSameTime(selectedCalendar, reservationCalendar))) {
+                                (reservationCalendar == null || selectedCalendar.after(minAllowedTime))) {
                             String formattedDateTime = formatDate(year, month, day, hourOfDay, minute);
                             editText.setText(formattedDateTime);
                         } else {
                             // Mostrar un mensaje o realizar alguna acción para indicar que la hora seleccionada no es válida
-                            Toast.makeText(getApplicationContext(), "Selecciona fecha o hora futura", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Selecciona una fecha u hora futura", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },

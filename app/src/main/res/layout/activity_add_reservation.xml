@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,391 +7,398 @@
     android:background="@drawable/backgroud_viewadd"
     tools:context=".Activity.AddReservationActivity">
 
-    <TextView
-        android:id="@+id/pagetitle"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar reservación"
-        android:textSize="25dp"
-        android:fontFamily="@font/nunito_sans"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="16dp"/>
+        android:paddingBottom="16dp">
 
-    <TextView
-        android:id="@+id/TextView_Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Reservación"
-        android:textSize="25dp"
-        android:fontFamily="@font/nunito_sans"
-        android:gravity="center"
-        android:layout_marginTop="70dp"/>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_Reservation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/TextView_Title"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/pagetitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:text="Agregar reservación"
+            android:textSize="25dp"
+            android:fontFamily="@font/nunito_sans"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="16dp"/>
 
-            <RelativeLayout
+        <TextView
+            android:id="@+id/TextView_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservación"
+            android:textSize="25dp"
+            android:fontFamily="@font/nunito_sans"
+            android:gravity="center"
+            android:layout_marginTop="70dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_Reservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/TextView_Title"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/TextViewNameReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nombre:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <EditText
-                    android:id="@+id/Add_Reservation_Name"
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:layout_toEndOf="@id/TextViewNameReservation"/>
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/TextViewDuiReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dui:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <EditText
-                    android:id="@+id/Add_Reservation_Dui"
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@id/TextViewDuiReservation"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:fontFamily="@font/nunito_sans"
-                    android:hint="00000000-0"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textSize="18dp" />
-
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/TextViewTelReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Teléfono:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <EditText
-                    android:id="@+id/Add_Reservation_Tel"
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"
-                    android:hint="+503 0000 0000"
-                    android:layout_toEndOf="@id/TextViewTelReservation"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/TextViewMountPerReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cantidad de personas:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <EditText
-                    android:id="@+id/Add_Reservation_AmountPeople"
-                    android:layout_width="170dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"
-                    android:hint="0"
-                    android:layout_toEndOf="@id/TextViewMountPerReservation"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/optionsTextViewResources"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Recursos:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <ImageButton
-                    android:id="@+id/SelectResources"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
-                    android:backgroundTint="#00FFFFFF"
-                    android:scaleType="center"
-                    android:src="@drawable/options" />
-
-                <HorizontalScrollView
-                    android:id="@+id/recursosmostrar"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/optionsTextViewResources">
+                    android:padding="5dp">
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/ChipGroupResources"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:singleLine="true"/>
-
-
-                </HorizontalScrollView>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/TextViewDateReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fecha de reservación:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <EditText
-                    android:id="@+id/Add_Reservation_DateReservation"
-                    android:layout_width="170dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="datetime"
-                    android:hint="00/00/0000"
-                    android:layout_toEndOf="@id/TextViewDateReservation"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/TextViewDateOutReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fecha de salida:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <EditText
-                    android:id="@+id/Add_Reservation_DateOut"
-                    android:layout_width="170dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:clickable="false"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="datetime"
-                    android:hint="00/00/0000"
-                    android:layout_toEndOf="@id/TextViewDateOutReservation"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/TextViewPriceReservation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:text="Precio del paquete:"
-                    android:textSize="18dp" />
-
-                <EditText
-                    android:id="@+id/Add_Reservation_ReservationPrice"
-                    android:layout_width="170dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:backgroundTint="@color/colorPrimaryLight"
-                    android:inputType="number"
-                    android:hint="$ 0.0"
-                    android:layout_toEndOf="@id/TextViewPriceReservation"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/textViewStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Estado"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewStatus">
-
-                    <RadioGroup
-                        android:id="@+id/radioGroupStatus"
+                    <TextView
+                        android:id="@+id/TextViewNameReservation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_below="@id/textViewStatus"
-                        android:layout_marginStart="50dp">
+                        android:text="Nombre:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
 
-                        <RadioButton
-                            android:id="@+id/radioButtonCancelled"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Cancelado"
-                            android:textSize="18dp"
-                            android:fontFamily="@font/nunito_sans"
-                            android:layout_marginTop="5dp"
-                            app:buttonTint="@color/colorPrimaryLight"/>
+                    <EditText
+                        android:id="@+id/Add_Reservation_Name"
+                        android:layout_width="280dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:maxLines="1"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:layout_toEndOf="@id/TextViewNameReservation"/>
 
-                        <RadioButton
-                            android:id="@+id/radioButtonPending"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pendiente"
-                            android:textSize="18dp"
-                            android:fontFamily="@font/nunito_sans"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginStart="25dp"
-                            app:buttonTint="@color/colorPrimaryLight"/>
+                </RelativeLayout>
 
-                    </RadioGroup>
 
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Comprobante:"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_marginTop="5dp"/>
+                    android:padding="5dp">
 
-                <Button
-                    android:id="@+id/Button_UploadPhoto"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:text="Subir"
-                    android:textSize="16dp"
-                    android:fontFamily="@font/nunito_sans"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="100dp"
-                    android:backgroundTint="@color/colorPrimaryDark"
-                    android:textColor="@color/white"/>
+                    <TextView
+                        android:id="@+id/TextViewDuiReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dui:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
 
-            </RelativeLayout>
+                    <EditText
+                        android:id="@+id/Add_Reservation_Dui"
+                        android:layout_width="280dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_toEndOf="@id/TextViewDuiReservation"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:fontFamily="@font/nunito_sans"
+                        android:hint="00000000-0"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textSize="18dp" />
 
-        </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/Button_AddReservation"
-        android:layout_width="120dp"
-        android:layout_height="45dp"
-        android:text="Agregar"
-        android:textSize="18dp"
-        android:fontFamily="@font/nunito_sans"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/colorPrimaryDarkest"
-        android:layout_below="@+id/cardView_Reservation"
-        android:textColor="@color/white"/>
+                </RelativeLayout>
 
-</RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/TextViewTelReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Teléfono:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <EditText
+                        android:id="@+id/Add_Reservation_Tel"
+                        android:layout_width="280dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:maxLines="1"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:inputType="number"
+                        android:hint="+503 0000 0000"
+                        android:layout_toEndOf="@id/TextViewTelReservation"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/TextViewMountPerReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad de personas:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <EditText
+                        android:id="@+id/Add_Reservation_AmountPeople"
+                        android:layout_width="170dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:maxLines="1"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:inputType="number"
+                        android:hint="0"
+                        android:layout_toEndOf="@id/TextViewMountPerReservation"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/optionsTextViewResources"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recursos:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <ImageButton
+                        android:id="@+id/SelectResources"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:backgroundTint="#00FFFFFF"
+                        android:scaleType="center"
+                        android:src="@drawable/options" />
+
+                    <HorizontalScrollView
+                        android:id="@+id/recursosmostrar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/optionsTextViewResources">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/ChipGroupResources"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            app:singleLine="true"/>
+
+
+                    </HorizontalScrollView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/TextViewDateReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha de reserva:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <EditText
+                        android:id="@+id/Add_Reservation_DateReservation"
+                        android:layout_width="170dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:maxLines="1"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:inputType="datetime"
+                        android:hint="00/00/0000"
+                        android:layout_toEndOf="@id/TextViewDateReservation"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/TextViewDateOutReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha de salida:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <EditText
+                        android:id="@+id/Add_Reservation_DateOut"
+                        android:layout_width="170dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:maxLines="1"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:inputType="datetime"
+                        android:hint="00/00/0000"
+                        android:layout_toEndOf="@id/TextViewDateOutReservation"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/TextViewPriceReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:text="Precio del paquete:"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/Add_Reservation_ReservationPrice"
+                        android:layout_width="170dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:maxLines="1"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:backgroundTint="@color/colorPrimaryLight"
+                        android:inputType="number"
+                        android:hint="$ 0.0"
+                        android:layout_toEndOf="@id/TextViewPriceReservation"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textViewStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textViewStatus">
+
+                        <RadioGroup
+                            android:id="@+id/radioGroupStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_below="@id/textViewStatus"
+                            android:layout_marginStart="50dp">
+
+                            <RadioButton
+                                android:id="@+id/radioButtonCancelled"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cancelado"
+                                android:textSize="18dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:layout_marginTop="5dp"
+                                app:buttonTint="@color/colorPrimaryLight"/>
+
+                            <RadioButton
+                                android:id="@+id/radioButtonPending"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendiente"
+                                android:textSize="18dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginStart="25dp"
+                                app:buttonTint="@color/colorPrimaryLight"/>
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Comprobante:"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginTop="5dp"/>
+
+                    <Button
+                        android:id="@+id/Button_UploadPhoto"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:text="Subir"
+                        android:textSize="16dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="100dp"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:textColor="@color/white"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/Button_AddReservation"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:text="Agregar"
+            android:textSize="18dp"
+            android:fontFamily="@font/nunito_sans"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-10dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/colorPrimaryDarkest"
+            android:layout_below="@+id/cardView_Reservation"
+            android:textColor="@color/white"/>
+
+    </RelativeLayout>
+
+</ScrollView>

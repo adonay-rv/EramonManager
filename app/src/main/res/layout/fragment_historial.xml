@@ -45,7 +45,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Recyler_View_Historial"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="450dp"
             android:padding="16dp">
 
         </androidx.recyclerview.widget.RecyclerView>
