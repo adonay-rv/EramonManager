@@ -21,15 +21,15 @@ import java.util.Map;
 public class Reservaciones implements Serializable {
     private String idReservacion;
     private String nombre;
-    private int dui;
-    private int tel;
-    private int cantidadPersonas;
+    private String dui;
+    private String tel;
+    private String cantidadPersonas;
     private String rescursos;
     private String dateReservation;
 
     private String fechaSalida;
 
-    private double PrecioReservacion;
+    private String PrecioReservacion;
     private String estado;
     private String comprobantePago; // Ruta de la foto, puede ser un Uri o un String dependiendo de tus necesidades
 
@@ -37,7 +37,7 @@ public class Reservaciones implements Serializable {
     public Reservaciones() {}
 
     // Constructor con parámetros
-    public Reservaciones(String idReservacion, String nombre, int dui, int tel, int cantidadPersonas, String rescursos, String dateReservation, String fechaSalida, double precioReservacion, String estado, String comprobantePago) {
+    public Reservaciones(String idReservacion, String nombre, String dui, String tel, String cantidadPersonas, String rescursos, String dateReservation, String fechaSalida, String precioReservacion, String estado, String comprobantePago) {
      this.idReservacion=idReservacion;
         this.nombre = nombre;
         this.dui = dui;
@@ -59,27 +59,27 @@ public class Reservaciones implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getDui() {
+    public String getDui() {
         return dui;
     }
 
-    public void setDui(int dui) {
+    public void setDui(String dui) {
         this.dui = dui;
     }
 
-    public int getTel() {
+    public String getTel() {
         return tel;
     }
 
-    public void setTel(int tel) {
+    public void setTel(String tel) {
         this.tel = tel;
     }
 
-    public int getCantidadPersonas() {
+    public String getCantidadPersonas() {
         return cantidadPersonas;
     }
 
-    public void setCantidadPersonas(int cantidadPersonas) {
+    public void setCantidadPersonas(String cantidadPersonas) {
         this.cantidadPersonas = cantidadPersonas;
     }
 
@@ -107,11 +107,11 @@ public class Reservaciones implements Serializable {
         this.fechaSalida = fechaSalida;
     }
 
-    public double getPrecioReservacion() {
+    public String getPrecioReservacion() {
         return PrecioReservacion;
     }
 
-    public void setPrecioReservacion(double precioReservacion) {
+    public void setPrecioReservacion(String precioReservacion) {
         PrecioReservacion = precioReservacion;
     }
 
@@ -139,7 +139,8 @@ public class Reservaciones implements Serializable {
         this.idReservacion = Id;
     }
 
-    public void crearReservacion(String nombre, int dui, int tel, int cantidadPersonas, String recursos, String dateReservation, String fechaSalida, double precioReservacion, String estado, String comprobantePago) {
+    public void crearReservacion(String nombre, String dui, String tel, String cantidadPersonas, String recursos,
+                                 String dateReservation, String fechaSalida, String precioReservacion, String estado, String comprobantePago) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reservacionesRef = database.getReference("Reservaciones");
 
@@ -160,8 +161,8 @@ public class Reservaciones implements Serializable {
         recursosRef.child(idRecursosAEliminar).removeValue();
         Log.d(null, resourceId);
     }
-    public void actualizarReserva(String idReservacion, String nombreReservacion, int dui, int tel, int cantidadPeople,
-                                  String info, String dateReservation, String dateOut, double precioReservacion,
+    public void actualizarReserva(String idReservacion, String nombreReservacion, String dui, String tel, String cantidadPeople,
+                                  String info, String dateReservation, String dateOut, String precioReservacion,
                                   String estado, String imageUrl) {
         // Obtén una referencia a la base de datos Firebase
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Reservaciones");

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -71,15 +72,29 @@ public class AddResourceActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView nombreRecurso1 = findViewById(R.id.Add_Resource_Name);
-                TextView Cantidad1 = findViewById(R.id.Add_Resource_Mount);
+                EditText nombreRecurso1 = findViewById(R.id.Add_Resource_Name);
+                EditText Cantidad1 = findViewById(R.id.Add_Resource_Mount);
+                ShapeableImageView ImageResource = findViewById(R.id.ImageResource);
+
+                //se obtienen los valores ingresados por el usuario en los campos de nombre y cantidad
                 String nombreRecurso = nombreRecurso1.getText().toString();
                 String Cantidad = Cantidad1.getText().toString();
                 String idRecursos = nombreRecurso1.getText().toString();
 
+                // verifica si el título es nulo o está vacío. Si es así, se muestra un mensaje de error
+                if (nombreRecurso==null || nombreRecurso.isEmpty()) {
+                    nombreRecurso1.setError("El nombre es requerido");
+                    return;
+                }
+                // verifica si la cantidad es nulo o está vacío. Si es así, se muestra un mensaje de error
+                if (Cantidad==null || Cantidad.isEmpty()) {
+                    Cantidad1.setError("La cantidad es requerida");
+                    return;
+                }
+
                 if (!TextUtils.isEmpty(imageUrl)) {
                     Date date = new Date();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     String fechaActual = dateFormat.format(date);
 
                     Recursos recursos = new Recursos();
@@ -92,8 +107,19 @@ public class AddResourceActivity extends AppCompatActivity {
                             } else {
                                 recursos.Crear(idRecursos, nombreRecurso, Integer.parseInt(Cantidad), imageUrl, fechaActual);
                             }
+
+                            //Se guardo con exito
+                            Toast.makeText(AddResourceActivity.this, "El recurso se ha guardado exitosamente", Toast.LENGTH_SHORT).show();
+
+                            // Limpiar los campos después de agregar con éxito
+                            nombreRecurso1.setText("");
+                            Cantidad1.setText("");
+                            ImageResource.setImageResource(R.drawable.glamping);
                         }
                     });
+                }
+                else {
+                    Toast.makeText(AddResourceActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -79,7 +79,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
         Reservaciones reservas = reservasList.get(position);
 
         holder.txtName.setText(reservas.getNombre());
-        holder.txtAmount.setText("Telefono: " + reservas.getTel());
+        holder.txtAmount.setText("Teléfono: " + reservas.getTel());
         holder.txtTimestamp.setText(reservas.getDateReservation());
 
 

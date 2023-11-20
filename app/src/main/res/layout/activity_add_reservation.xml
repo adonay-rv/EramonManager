@@ -92,12 +92,13 @@
                     android:layout_width="280dp"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
-                    android:maxLines="1"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/nunito_sans"
+                    android:layout_toEndOf="@id/TextViewDuiReservation"
                     android:backgroundTint="@color/colorPrimaryLight"
+                    android:fontFamily="@font/nunito_sans"
+                    android:hint="00000000-0"
                     android:inputType="number"
-                    android:layout_toEndOf="@id/TextViewDuiReservation"/>
+                    android:maxLines="1"
+                    android:textSize="18dp" />
 
 
 
@@ -112,7 +113,7 @@
                     android:id="@+id/TextViewTelReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tel:"
+                    android:text="Teléfono:"
                     android:textSize="18dp"
                     android:fontFamily="@font/nunito_sans"
                     android:layout_marginTop="5dp"/>
@@ -127,6 +128,7 @@
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
                     android:inputType="number"
+                    android:hint="+503 0000 0000"
                     android:layout_toEndOf="@id/TextViewTelReservation"/>
 
             </RelativeLayout>
@@ -155,6 +157,7 @@
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
                     android:inputType="number"
+                    android:hint="0"
                     android:layout_toEndOf="@id/TextViewMountPerReservation"/>
 
             </RelativeLayout>
@@ -224,6 +227,7 @@
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
                     android:inputType="datetime"
+                    android:hint="00/00/0000"
                     android:layout_toEndOf="@id/TextViewDateReservation"/>
 
             </RelativeLayout>
@@ -252,6 +256,7 @@
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
                     android:inputType="datetime"
+                    android:hint="00/00/0000"
                     android:layout_toEndOf="@id/TextViewDateOutReservation"/>
 
             </RelativeLayout>
@@ -280,6 +285,7 @@
                     android:fontFamily="@font/nunito_sans"
                     android:backgroundTint="@color/colorPrimaryLight"
                     android:inputType="number"
+                    android:hint="$ 0.0"
                     android:layout_toEndOf="@id/TextViewPriceReservation"/>
 
             </RelativeLayout>
