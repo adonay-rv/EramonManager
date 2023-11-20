@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.eramonmanager.Activity.AddReservationActivity;
 import com.example.eramonmanager.Activity.AddResourceActivity;
@@ -37,6 +39,7 @@ public class FragmentReservations extends Fragment {
     private RecyclerView recyclerView;
     private ReservacionesAdapter reservacionesAdapter;
     private List<Reservaciones> reservacionesList;
+    Button AllReservations, pendientes;
 
     //Buscador
     SearchView BuscarReservacion;
@@ -46,6 +49,8 @@ public class FragmentReservations extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_reservations, container, false);
         addReservations = rootView.findViewById(R.id.Add_Reservation);
         recyclerView = rootView.findViewById(R.id.Recyler_View_Reservation);
+        AllReservations = rootView.findViewById(R.id.Button_Todas);
+        pendientes = rootView.findViewById(R.id.Button_Pendientes);
 
         //Buscador
         BuscarReservacion = rootView.findViewById(R.id.SearchView_Reservation);
@@ -58,10 +63,17 @@ public class FragmentReservations extends Fragment {
 
         // Datos de Firebase en recursosList
         obtenerDatosDeFirebase();
+
         addReservations.setOnClickListener((v) -> {
             Intent intent = new Intent(requireActivity(), AddReservationActivity.class);
             startActivity(intent);
         });
+
+        AllReservations.setOnClickListener((v) -> {
+            obtenerDatosDeFirebase();
+        });
+
+        //pendientes.setOnClickListener(v -> ObtenerReservasPendientes("Pendiente"));
 
         return rootView;
     }

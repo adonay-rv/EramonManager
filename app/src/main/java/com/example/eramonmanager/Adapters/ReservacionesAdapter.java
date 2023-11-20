@@ -104,7 +104,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
                 intent.putExtra("precio", reservacion.getPrecioReservacion());
                 intent.putExtra("salida", reservacion.getFechaSalida());
                 intent.putExtra("estado", reservacion.getEstado());
-
+                intent.putExtra("recursos", reservacion.getRescursos());
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservacion.getId());
 
@@ -116,7 +116,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
             }
         });
 
-        final String resourceId = reservas.getNombre();
+        final String resourceId = reservas.getId();
         holder.deleteButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
