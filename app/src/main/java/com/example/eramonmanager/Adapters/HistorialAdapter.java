@@ -8,13 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.eramonmanager.Activity.AddReservationActivity;
 import com.example.eramonmanager.Activity.Reservaciones;
 import com.example.eramonmanager.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -81,20 +83,19 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
         });
     }
 
-
-
-
     @Override
     public int getItemCount() {
         return reservasList.size();
     }
 
-    public Reservaciones getItem(int position) {
-        return reservasList.get(position);
+    // Método para realizar el filtrado por nombre de la persona y fecha
+    public void filterList(List<Reservaciones> filteredList) {
+        reservasList.clear();
+        reservasList.addAll(filteredList);
+        notifyDataSetChanged();
     }
 
     public static class HistorialViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
         TextView txtName;
         TextView txtAmount;
         TextView txtTimestamp;
@@ -104,8 +105,6 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
             txtName = itemView.findViewById(R.id.Reservation_Name_Historial);
             txtAmount = itemView.findViewById(R.id.Tel_Reservation_Historial);
             txtTimestamp = itemView.findViewById(R.id.Timestamp_Reservation_Historial);
-
-
         }
     }
 }
