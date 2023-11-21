@@ -34,12 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentReservations extends Fragment {
-
     private FloatingActionButton addReservations;
     private RecyclerView recyclerView;
     private ReservacionesAdapter reservacionesAdapter;
     private List<Reservaciones> reservacionesList;
-    Button AllReservations, pendientes;
+    Button pendientes;
 
     //Buscador
     SearchView BuscarReservacion;
@@ -49,7 +48,6 @@ public class FragmentReservations extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_reservations, container, false);
         addReservations = rootView.findViewById(R.id.Add_Reservation);
         recyclerView = rootView.findViewById(R.id.Recyler_View_Reservation);
-        AllReservations = rootView.findViewById(R.id.Button_Todas);
         pendientes = rootView.findViewById(R.id.Button_Pendientes);
 
         //Buscador
@@ -69,13 +67,89 @@ public class FragmentReservations extends Fragment {
             startActivity(intent);
         });
 
-        AllReservations.setOnClickListener((v) -> {
-            obtenerDatosDeFirebase();
+        pendientes.setOnClickListener(v -> ObtenerReservasPendientes("Pendiente"));
+        BuscarReservacion.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BuscarReservacionM(newText);
+                return false;
+            }
         });
 
-        //pendientes.setOnClickListener(v -> ObtenerReservasPendientes("Pendiente"));
-
         return rootView;
+    }
+
+    //PARA BUSCAR
+    void BuscarReservacionM(String searchText) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Reservaciones");
+
+        // Limpiar la lista de notas antes de agregar las nuevas
+        reservacionesList.clear();
+
+        buscarPorCampo(reference.orderByChild("nombre").startAt(searchText).endAt(searchText + "\uf8ff"));
+        buscarPorCampo(reference.orderByChild("dateReservation").startAt(searchText).endAt(searchText + "\uf8ff"));
+
+        // searchText a int antes de realizar la consulta
+        try {
+            int dui = Integer.parseInt(searchText);
+            buscarPorCampo(reference.orderByChild("dui").startAt(dui).endAt(dui));
+        } catch (NumberFormatException e) {
+            // si searchText no es un número, no se realiza la consulta por DUI
+        }
+    }
+
+    //PARA BUSCAR
+    void buscarPorCampo(Query query) {
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot noteSnapshot: dataSnapshot.getChildren()) {
+                    Reservaciones reservaciones = noteSnapshot.getValue(Reservaciones.class);
+
+                    // Agregar la nota a la lista
+                    reservacionesList.add(reservaciones);
+                }
+
+                // Notificar al adaptador que los datos han cambiado
+                reservacionesAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    void ObtenerReservasPendientes(String searchText) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Reservaciones");
+
+        // Limpiar la lista de notas antes de agregar las nuevas
+        reservacionesList.clear();
+
+        Query query = reference.orderByChild("estado").startAt(searchText).endAt(searchText + "\uf8ff");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot noteSnapshot: dataSnapshot.getChildren()) {
+                    Reservaciones reservaciones = noteSnapshot.getValue(Reservaciones.class);
+
+                    // Agregar la nota a la lista
+                    reservacionesList.add(reservaciones);
+                }
+                // Notificar al adaptador que los datos han cambiado
+                reservacionesAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     private void obtenerDatosDeFirebase() {
