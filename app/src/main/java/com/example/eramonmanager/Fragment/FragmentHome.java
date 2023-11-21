@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,20 +58,27 @@ public class FragmentHome extends Fragment {
         todasLasReservaciones = new ArrayList<>();
         obtenerTodasLasReservaciones();
         homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
-
         recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewReservaciones.setAdapter(homeAdapter);
 
         calendarView_Item.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int Year, int Month, int Day) {
-                String FechaSeleccionada = String.format(Day + "/" + (Month + 1) + "/" + Year);
+                String FechaSeleccionada = String.format("%02d/%02d/%04d", Day, Month + 1, Year);
 
                 // Filtra las reservaciones que coinciden con la fecha seleccionada
                 List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
+                SimpleDateFormat formatDateReservation = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 for (Reservaciones reservacion : todasLasReservaciones) {
-                    if (reservacion.getDateReservation().equals(FechaSeleccionada)) {
-                        reservacionesFiltradas.add(reservacion);
+                    try {
+                        Date date = formatDateReservation.parse(reservacion.getDateReservation());
+                        formatDateReservation = new SimpleDateFormat("dd/MM/yyyy");
+                        String dateWithoutTime = formatDateReservation.format(date);
+                        if (dateWithoutTime.equals(FechaSeleccionada)) {
+                            reservacionesFiltradas.add(reservacion);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -82,13 +91,12 @@ public class FragmentHome extends Fragment {
                     homeAdapter.notifyDataSetChanged();
                 }
 
-                //Toast.makeText(getContext(), "Fecha: " + FechaSeleccionada, Toast.LENGTH_SHORT).show();
                 textdate.setText(FechaSeleccionada);
             }
         });
         return viewHome;
     }
-    
+
     // Este método retorna todas las reservaciones
     private void obtenerTodasLasReservaciones() {
         // Obtiene una referencia a la base de datos

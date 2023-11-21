@@ -38,7 +38,7 @@ public class FragmentReservations extends Fragment {
     private RecyclerView recyclerView;
     private ReservacionesAdapter reservacionesAdapter;
     private List<Reservaciones> reservacionesList;
-    Button pendientes;
+    Button AllReservations, pendientes;
 
     //Buscador
     SearchView BuscarReservacion;
@@ -49,6 +49,7 @@ public class FragmentReservations extends Fragment {
         addReservations = rootView.findViewById(R.id.Add_Reservation);
         recyclerView = rootView.findViewById(R.id.Recyler_View_Reservation);
         pendientes = rootView.findViewById(R.id.Button_Pendientes);
+        AllReservations =  rootView.findViewById(R.id.Button_Todas);
 
         //Buscador
         BuscarReservacion = rootView.findViewById(R.id.SearchView_Reservation);
@@ -65,6 +66,10 @@ public class FragmentReservations extends Fragment {
         addReservations.setOnClickListener((v) -> {
             Intent intent = new Intent(requireActivity(), AddReservationActivity.class);
             startActivity(intent);
+        });
+
+        AllReservations.setOnClickListener((v) -> {
+            obtenerDatosDeFirebase();
         });
 
         pendientes.setOnClickListener(v -> ObtenerReservasPendientes("Pendiente"));
