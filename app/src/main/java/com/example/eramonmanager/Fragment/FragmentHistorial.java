@@ -69,13 +69,15 @@ public class FragmentHistorial extends Fragment {
 
         for (Reservaciones reservacion : reservacionesListFull) {
             if (reservacion.getNombre().toLowerCase().contains(text.toLowerCase()) ||
-                    reservacion.getDateReservation().toLowerCase().contains(text.toLowerCase())) {
+                    reservacion.getDateReservation().toLowerCase().contains(text.toLowerCase()) ||
+                    reservacion.getPrecioReservacion().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(reservacion);
             }
         }
 
         historialAdapter.filterList(filteredList);
     }
+
 
     private void obtenerDatosDeFirebase() {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Reservaciones");
@@ -109,3 +111,4 @@ public class FragmentHistorial extends Fragment {
         });
     }
 }
+
