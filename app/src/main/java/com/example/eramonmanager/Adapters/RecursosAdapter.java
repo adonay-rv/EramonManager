@@ -61,14 +61,16 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
         final String resourceId = recursos.getIdRecursos(); // Reemplaza getIdDelRecurso con el método adecuado para obtener el ID
 
         // Botón de eliminación
+        // Botón de eliminación
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Llamar al método Eliminar con el ID del recurso a elimina
-                Eliminar(resourceId);
+                Recursos.Eliminar(resourceId, recursos.getImagenUrl());
                 // Ahora aquí, podrías también actualizar la lista o la interfaz de usuario para reflejar el cambio.
             }
         });
+
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,14 +141,24 @@ public class Recursos {
     }
 
 
-    public static void Eliminar(String resourceId) {
-
+    public static void Eliminar(String resourceId, String imageUrl) {     // Eliminar de Firebase Realtime Database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference recursosRef = database.getReference("Recursos");
-        String idRecursosAEliminar = resourceId;
-        recursosRef.child(idRecursosAEliminar).removeValue();
-        Log.d(null, resourceId);
+        recursosRef.child(resourceId).removeValue();
+
+        // Eliminar de Firebase Storage
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl(imageUrl);
+            storageRef.delete().addOnSuccessListener(aVoid -> {
+                Log.d("Recursos", "Imagen eliminada del almacenamiento con éxito");
+            }).addOnFailureListener(exception -> {
+                Log.e("Recursos", "Error al eliminar la imagen del almacenamiento", exception);
+            });
+        }
+        Log.d("Recursos", "Recurso eliminado con éxito: " + resourceId);
     }
+
 
     public interface MostrarRecursosCallback {
         void onResultado(List<String> nombresRecursos);
