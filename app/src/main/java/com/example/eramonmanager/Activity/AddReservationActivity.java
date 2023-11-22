@@ -471,6 +471,21 @@ public class AddReservationActivity extends AppCompatActivity {
 
         imageButton1.setOnClickListener(view -> checkAndOpenGallery());
 
+
+        Button viewPhotoButton = findViewById(R.id.Button_ViewPhoto);
+        viewPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Muestra la imagen en un Dialog
+                if (imageUrl1 != null && !imageUrl1.isEmpty()) {
+                    showImageDialog(imageUrl1);
+                } else {
+                    Toast.makeText(AddReservationActivity.this, "No hay imagen disponible", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
     private final ActivityResultLauncher<Intent> manageStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -526,6 +541,9 @@ public class AddReservationActivity extends AppCompatActivity {
                                     // Mostrar mensaje de éxito
                                     Toast.makeText(AddReservationActivity.this, "Imagen subida con éxito", Toast.LENGTH_SHORT).show();
 
+                                    // Hacer visible el botón después de subir la imagen
+                                    Button viewPhotoButton = findViewById(R.id.Button_ViewPhoto);
+                                    viewPhotoButton.setVisibility(View.VISIBLE);
                                 })
                                 .addOnFailureListener(e -> {
                                     // Manejar fallos
@@ -537,6 +555,18 @@ public class AddReservationActivity extends AppCompatActivity {
                         Toast.makeText(AddReservationActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
                     });
         }
+    }
+
+    // Método para mostrar la imagen en un Dialog
+    private void showImageDialog(String imageUrl) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.dialog_image, null);
+        ImageView dialogImageView = view.findViewById(R.id.dialogImageView);
+        Picasso.get().load(imageUrl).into(dialogImageView);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void obtenerNombresRecursos() {

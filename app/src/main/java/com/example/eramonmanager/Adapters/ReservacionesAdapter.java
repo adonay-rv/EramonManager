@@ -120,11 +120,14 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
         holder.deleteButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 EliminarR(resourceId, reservas.getComprobantePago());
+
+                Toast.makeText(context, "Reservación eliminada correctamente", Toast.LENGTH_SHORT).show();
             }
+
         });
 
-        // Reemplaza getIdDelRecurso con el método adecuado para obtener el ID
 
         // Botón de generar pdf
         holder.pdfButton.setOnClickListener(new View.OnClickListener() {

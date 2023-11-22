@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,7 +68,8 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
             public void onClick(View v) {
                 // Llamar al método Eliminar con el ID del recurso a elimina
                 Recursos.Eliminar(resourceId, recursos.getImagenUrl());
-                // Ahora aquí, podrías también actualizar la lista o la interfaz de usuario para reflejar el cambio.
+
+                Toast.makeText(context, "Recurso eliminado correctamente", Toast.LENGTH_SHORT).show();
             }
         });
 

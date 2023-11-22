@@ -379,6 +379,19 @@
                         android:backgroundTint="@color/colorPrimaryDark"
                         android:textColor="@color/white"/>
 
+                    <Button
+                        android:id="@+id/Button_ViewPhoto"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:text="Ver"
+                        android:textSize="16dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:textColor="@color/white"
+                        android:visibility="gone"/>
+
                 </RelativeLayout>
 
             </LinearLayout>
@@ -397,7 +410,7 @@
             android:layout_marginEnd="16dp"
             android:backgroundTint="@color/colorPrimaryDarkest"
             android:layout_below="@+id/cardView_Reservation"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 
