@@ -1,14 +1,23 @@
 package com.example.eramonmanager.Activity;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -32,6 +41,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -48,14 +58,16 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class AddReservationActivity extends AppCompatActivity {
 
-    private TextWatcher duiTextWatcher, telTextWatcher, priceTextWatcher;
+    private TextWatcher duiTextWatcher, telTextWatcher;
     private boolean isFormatting = false;
     private ChipGroup chipGroup;
     private DatabaseReference mDatabase;
@@ -66,6 +78,9 @@ public class AddReservationActivity extends AppCompatActivity {
     static TextView pageTitleTextView;
     boolean isEditMode = false;
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private boolean isImageUploaded = false;
+
     EditText titleEditText,teledit,duiedit,cantidadedit,reservacionedit,salidaedit,precoedit;
     private ImageButton seleccionarButton;
     private boolean[] selectedOptions;
@@ -75,24 +90,15 @@ public class AddReservationActivity extends AppCompatActivity {
     public String info;
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri filePath = data.getData();
-
-
-
-            // Escala la imagen para que se ajuste al tamaño del ImageButton
-
-            imageUrl1 = filePath.toString();
-        }
-
-
-
-
-    }
+    private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri filePath = result.getData().getData();
+                    uploadImage(filePath);
+                }
+            }
+    );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -393,8 +399,8 @@ public class AddReservationActivity extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(priceStr)) {
                     showError("El campo Precio del paquete es requerido");
                     return;
-                }else if (TextUtils.isEmpty(imageUrl1)) {
-                    showError("Debes subir el comprobante de pago");
+                }if (!isImageUploaded) {
+                    Toast.makeText(AddReservationActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -434,7 +440,7 @@ public class AddReservationActivity extends AppCompatActivity {
                 } else {
                     // Modo de creación: Crear una nueva reserva
                     reservaciones.crearReservacion(
-                             nombreReservacion, duiStr, telStr, cantidadPeopleStr, info,
+                            nombreReservacion, duiStr, telStr, cantidadPeopleStr, info,
                             dateReservationStr, dateOutStr, priceStr, estado, imageUrl1);
                 }
 
@@ -463,13 +469,74 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         });
 
-        imageButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toOpenGallery();
-            }
-        });
+        imageButton1.setOnClickListener(view -> checkAndOpenGallery());
 
+    }
+    private final ActivityResultLauncher<Intent> manageStoragePermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (Environment.isExternalStorageManager()) {
+                                openGallery();
+                            }
+                        }
+                    });
+    private void checkAndOpenGallery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                openGallery();
+            } else {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                manageStoragePermissionLauncher.launch(intent);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+        } else {
+            openGallery();
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        galleryLauncher.launch(intent);
+    }
+
+    private void uploadImage(Uri filePath) {
+        if (filePath != null) {
+            String imageName = "imagesComprobantes/" + System.currentTimeMillis() + ".jpg";
+
+            // Mostrar mensaje de subida en proceso
+            Toast.makeText(AddReservationActivity.this, "Subiendo imagen...", Toast.LENGTH_SHORT).show();
+
+            storage.getReference().child(imageName).putFile(filePath)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Obtener la URL de descarga de la imagen subida
+                        storage.getReference().child(imageName).getDownloadUrl()
+                                .addOnSuccessListener(uri -> {
+                                    imageUrl1 = uri.toString();
+                                    isImageUploaded = true;
+
+                                    // Mostrar mensaje de éxito
+                                    Toast.makeText(AddReservationActivity.this, "Imagen subida con éxito", Toast.LENGTH_SHORT).show();
+
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Manejar fallos
+                                    Toast.makeText(AddReservationActivity.this, "Error al obtener la URL de la imagen", Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar fallos
+                        Toast.makeText(AddReservationActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
+                    });
+        }
     }
 
     private void obtenerNombresRecursos() {
@@ -568,12 +635,6 @@ public class AddReservationActivity extends AppCompatActivity {
         } else {
             return "Desconocido";
         }
-    }
-    private void toOpenGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST1);
     }
 
     //Formato de Dui

@@ -120,7 +120,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
         holder.deleteButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EliminarR(resourceId);
+                EliminarR(resourceId, reservas.getComprobantePago());
             }
         });
 

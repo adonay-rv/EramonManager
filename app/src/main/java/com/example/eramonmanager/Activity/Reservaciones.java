@@ -1,3 +1,4 @@
+
 package com.example.eramonmanager.Activity;
 
 import static android.content.ContentValues.TAG;
@@ -13,6 +14,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -38,7 +41,7 @@ public class Reservaciones implements Serializable {
 
     // Constructor con parámetros
     public Reservaciones(String idReservacion, String nombre, String dui, String tel, String cantidadPersonas, String rescursos, String dateReservation, String fechaSalida, String precioReservacion, String estado, String comprobantePago) {
-     this.idReservacion=idReservacion;
+        this.idReservacion=idReservacion;
         this.nombre = nombre;
         this.dui = dui;
         this.tel = tel;
@@ -154,13 +157,25 @@ public class Reservaciones implements Serializable {
     }
 
 
-    public static void EliminarR(String resourceId) {
+    public static void EliminarR(String resourceId,  String imageUrl) {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference recursosRef = database.getReference("Reservaciones");
         String idRecursosAEliminar = resourceId;
         recursosRef.child(idRecursosAEliminar).removeValue();
-        Log.d(null, resourceId);
+
+        // Eliminar de Firebase Storage
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl(imageUrl);
+            storageRef.delete().addOnSuccessListener(aVoid -> {
+
+            }).addOnFailureListener(exception -> {
+                Log.e("Recursos", "Error al eliminar la imagen del almacenamiento", exception);
+            });
+        }
+        Log.d("Recursos", "Recurso eliminado con éxito: " + resourceId);
+
     }
     public void actualizarReserva(String idReservacion, String nombreReservacion, String dui, String tel, String cantidadPeople,
                                   String info, String dateReservation, String dateOut, String precioReservacion,
