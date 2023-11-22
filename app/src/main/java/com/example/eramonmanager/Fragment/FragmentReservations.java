@@ -86,6 +86,20 @@ public class FragmentReservations extends Fragment {
             }
         });
 
+        BuscarReservacion.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BuscarReservacionM(newText);
+                return false;
+            }
+        });
+
+
         return rootView;
     }
 
@@ -98,14 +112,7 @@ public class FragmentReservations extends Fragment {
 
         buscarPorCampo(reference.orderByChild("nombre").startAt(searchText).endAt(searchText + "\uf8ff"));
         buscarPorCampo(reference.orderByChild("dateReservation").startAt(searchText).endAt(searchText + "\uf8ff"));
-
-        // searchText a int antes de realizar la consulta
-        try {
-            int dui = Integer.parseInt(searchText);
-            buscarPorCampo(reference.orderByChild("dui").startAt(dui).endAt(dui));
-        } catch (NumberFormatException e) {
-            // si searchText no es un número, no se realiza la consulta por DUI
-        }
+        buscarPorCampo(reference.orderByChild("dui").startAt(searchText).endAt(searchText + "\uf8ff"));
     }
 
     //PARA BUSCAR
