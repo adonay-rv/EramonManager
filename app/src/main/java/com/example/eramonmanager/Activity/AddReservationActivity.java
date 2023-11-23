@@ -58,6 +58,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -140,6 +141,7 @@ public class AddReservationActivity extends AppCompatActivity {
         String fechareservacion = getIntent().getStringExtra("reservacion");
         String fechasalida = getIntent().getStringExtra("salida");
         String docId = getIntent().getStringExtra("docId");
+        imageUrl1 = getIntent().getStringExtra("imageUrl");
 
 
         titleEditText.setText(title);
@@ -191,17 +193,40 @@ public class AddReservationActivity extends AppCompatActivity {
         //Obtener los recursos seleccionados para volver a mostrarlos
         chipGroup = findViewById(R.id.ChipGroupResources);
 
-        String recursos = getIntent().getStringExtra("recursos");
 
+
+        String recursos = getIntent().getStringExtra("recursos");
         if (recursos != null) {
             String[] opciones = recursos.split(" ");
 
             for (int i = 0; i < opciones.length; i += 3) {
                 if (i + 2 < opciones.length) {
-                    String opcion = opciones[i] + " " + opciones[i+1] + " " + opciones[i+2];
+                    String opcion = opciones[i] + " " + opciones[i + 1] + " " + opciones[i + 2];
+
                     Chip chip = new Chip(this);
                     chip.setText(opcion);
-                    chip.setClickable(false);
+
+                    // Configura el Chip para ser clickeable
+
+                    if (editable) {
+                        // Si estás en modo de edición, muestra el ícono de cierre
+                        chip.setCloseIconVisible(true);
+                        chip.setClickable(true);
+
+
+                        // Configura el listener para el cierre del Chip
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Elimina el Chip del chipGroup
+                                chipGroup.removeView(chip);
+                            }
+                        });
+                    } else {
+                        // Si no estás en modo de edición, oculta el ícono de cierre
+                        chip.setCloseIconVisible(false);
+                    }
+
                     chipGroup.addView(chip);
                 } else {
                     // Muestra un mensaje al usuario
@@ -377,6 +402,7 @@ public class AddReservationActivity extends AppCompatActivity {
                 String dateOutStr = dateOutEditText.getText().toString();
                 String priceStr = priceEditText.getText().toString();
 
+
                 // Validar que todos los campos estén llenos
                 if (TextUtils.isEmpty(nombreReservacion)) {
                     showError("El nombre de la reserva es requerido");
@@ -437,17 +463,25 @@ public class AddReservationActivity extends AppCompatActivity {
                     reservaciones.actualizarReserva(
                             title, nombreReservacion, duiStr, telStr, cantidadPeopleStr, info,
                             dateReservationStr, dateOutStr, priceStr, estado, imageUrl1);
+
+                    showSuccessMessage("La reserva se ha actualizado exitosamente");
+
+                    // Cerrar la actividad o realizar otras acciones según sea necesario
+                    finish();
+
+
                 } else {
                     // Modo de creación: Crear una nueva reserva
                     reservaciones.crearReservacion(
                             nombreReservacion, duiStr, telStr, cantidadPeopleStr, info,
                             dateReservationStr, dateOutStr, priceStr, estado, imageUrl1);
+
+                    showSuccessMessage("La reserva se ha guardado exitosamente");
+
+                    // Cerrar la actividad o realizar otras acciones según sea necesario
+                    finish();
                 }
 
-                showSuccessMessage("La reserva se ha guardado exitosamente");
-
-                // Cerrar la actividad o realizar otras acciones según sea necesario
-                finish();
             }
         });
 
@@ -469,23 +503,51 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         });
 
-        imageButton1.setOnClickListener(view -> checkAndOpenGallery());
+        //Eliminar imagen existente
+        if (isEditMode) {
+            // Establecer un OnClickListener para "Button_UploadPhoto" para manejar la eliminación de la imagen existente
+            imageButton1.setOnClickListener(view -> deleteExistingImageAndUploadNewImage());
+        } else {
+            // Establecer un OnClickListener para "Button_UploadPhoto" para manejar la carga de la nueva imagen
+            imageButton1.setOnClickListener(view -> checkAndOpenGallery());
+        }
 
 
+        //Elegir imagen
+        //imageButton1.setOnClickListener(view -> checkAndOpenGallery());
+
+        //Ver imagen
         Button viewPhotoButton = findViewById(R.id.Button_ViewPhoto);
-        viewPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Muestra la imagen en un Dialog
-                if (imageUrl1 != null && !imageUrl1.isEmpty()) {
-                    showImageDialog(imageUrl1);
-                } else {
-                    Toast.makeText(AddReservationActivity.this, "No hay imagen disponible", Toast.LENGTH_SHORT).show();
+
+        if (isEditMode) {
+            viewPhotoButton.setVisibility(View.VISIBLE);
+            viewPhotoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Muestra la imagen en un Dialog
+                    if (imageUrl1 != null && !imageUrl1.isEmpty()) {
+                        showImageDialog(imageUrl1);
+                    }
+                    else{
+                        Toast.makeText(AddReservationActivity.this, "No hay imagen disponible", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
 
-
+        } else {
+            viewPhotoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Muestra la imagen en un Dialog
+                    if (imageUrl1 != null && !imageUrl1.isEmpty()) {
+                        showImageDialog(imageUrl1);
+                    }
+                    else{
+                        Toast.makeText(AddReservationActivity.this, "No hay imagen disponible", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
     private final ActivityResultLauncher<Intent> manageStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -567,6 +629,29 @@ public class AddReservationActivity extends AppCompatActivity {
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void deleteExistingImageAndUploadNewImage() {
+        // Eliminar la imagen existente del almacenamiento si la hay
+        if (imageUrl1 != null && !imageUrl1.isEmpty()) {
+            StorageReference storageRef = storage.getReferenceFromUrl(imageUrl1);
+
+            storageRef.delete()
+                    .addOnSuccessListener(aVoid -> {
+                        // Archivo eliminado exitosamente
+                        Toast.makeText(AddReservationActivity.this, "Seleccione una nueva imagen", Toast.LENGTH_SHORT).show();
+
+                        // Subir la nueva imagen
+                        checkAndOpenGallery();
+                    })
+                    .addOnFailureListener(exception -> {
+                        // Manejar cualquier error
+                        Toast.makeText(AddReservationActivity.this, "Error al eliminar la imagen existente", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            // Si no hay una imagen existente, simplemente abre la galería para subir una nueva
+            checkAndOpenGallery();
+        }
     }
 
     private void obtenerNombresRecursos() {

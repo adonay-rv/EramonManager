@@ -1,3 +1,4 @@
+
 package com.example.eramonmanager.Adapters;
 
 import static com.example.eramonmanager.Activity.Recursos.Eliminar;
@@ -105,6 +106,7 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
                 intent.putExtra("salida", reservacion.getFechaSalida());
                 intent.putExtra("estado", reservacion.getEstado());
                 intent.putExtra("recursos", reservacion.getRescursos());
+                intent.putExtra("imageUrl", reservacion.getComprobantePago());
                 // Agrega el ID de la reservación como un extra al intento.
                 intent.putExtra("docId", reservacion.getId());
 
