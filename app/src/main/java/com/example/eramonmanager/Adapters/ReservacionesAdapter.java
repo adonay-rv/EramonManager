@@ -1,4 +1,3 @@
-
 package com.example.eramonmanager.Adapters;
 
 import static com.example.eramonmanager.Activity.Recursos.Eliminar;
@@ -265,6 +264,12 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
             pdfDocument.writeTo(outputStream);
             outputStream.close();
 
+            // Abre el archivo PDF
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(intent);
+
             //Ruta del archivo generado
             Toast.makeText(context, "PDF generado en: " + uri.getPath(), Toast.LENGTH_SHORT).show();
         } else {
@@ -274,8 +279,14 @@ public class ReservacionesAdapter extends RecyclerView.Adapter<ReservacionesAdap
             //Obtiene la ruta del directorio de descarga
             String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
             File file = new File(directoryPath, "Reservas_EramonParadise360" + reservaciones.getNombre() + ".pdf");
-            pdfDocument.writeTo(new FileOutputStream(file));
-            //Crea un nuevo objeto file
+            pdfDocument.writeTo(new FileOutputStream(file)); //Crea un nuevo objeto file
+
+            // Abre el archivo PDF
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.fromFile(file);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            context.startActivity(intent);
 
             Toast.makeText(context, "PDF generado en: " + file.getPath(), Toast.LENGTH_SHORT).show();
         }

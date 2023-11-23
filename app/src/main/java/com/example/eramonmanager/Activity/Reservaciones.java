@@ -1,5 +1,3 @@
-
-
 package com.example.eramonmanager.Activity;
 
 import static android.content.ContentValues.TAG;
@@ -184,6 +182,9 @@ public class Reservaciones implements Serializable {
         // Obtén una referencia a la base de datos Firebase
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Reservaciones");
 
+        // Obtén una referencia a la reserva que deseas actualizar utilizando su ID
+        DatabaseReference reservaRef = databaseReference.child(idReservacion);
+
         // Construye el mapa de valores que se van a actualizar
         Map<String, Object> reservaMap = new HashMap<>();
         reservaMap.put("nombre", nombreReservacion);
@@ -196,10 +197,10 @@ public class Reservaciones implements Serializable {
         reservaMap.put("precioReservacion", precioReservacion);
         reservaMap.put("estado", estado);
 
-        reservaMap.put("imageUrl", imageUrl);
+        reservaMap.put("comprobantePago", imageUrl);  // Actualiza la URL de la imagen
 
         // Actualiza los valores en la base de datos
-        databaseReference.child(idReservacion).updateChildren(reservaMap)
+        reservaRef.updateChildren(reservaMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

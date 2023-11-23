@@ -54,12 +54,29 @@ public class FragmentHome extends Fragment {
         String fechaActual = fecha_fechaActual.format(new Date());
         textdate.setText(fechaActual);
 
-        // Inicializa todasLasReservaciones y homeAdapter
         todasLasReservaciones = new ArrayList<>();
         obtenerTodasLasReservaciones();
-        homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
+
+        // Filtra las reservaciones que coinciden con la fecha actual
+        List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
+        SimpleDateFormat formatDateReservation = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        for (Reservaciones reservacion : todasLasReservaciones) {
+            try {
+                Date date = formatDateReservation.parse(reservacion.getDateReservation());
+                formatDateReservation = new SimpleDateFormat("dd/MM/yyyy");
+                String dateWithoutTime = formatDateReservation.format(date);
+                if (dateWithoutTime.equals(fechaActual)) {
+                    reservacionesFiltradas.add(reservacion);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        homeAdapter = new HomeAdapter(reservacionesFiltradas, requireContext());
         recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewReservaciones.setAdapter(homeAdapter);
+
 
         calendarView_Item.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -98,41 +115,46 @@ public class FragmentHome extends Fragment {
     }
 
     // Este método retorna todas las reservaciones
-    private void obtenerTodasLasReservaciones() {
-        // Obtiene una referencia a la base de datos
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    public void obtenerTodasLasReservaciones() {
 
-        // Obtiene una referencia a la colección de reservaciones
-        DatabaseReference reservacionesRef = mDatabase.child("Reservaciones");
+        //Captura la fecha actual
+        SimpleDateFormat fecha_fechaActual = new SimpleDateFormat("dd/MM/yyyy", new Locale("es", "ES"));
+        String fechaActual = fecha_fechaActual.format(new Date());
 
-        // Agrega un ValueEventListener a la referencia de reservaciones
-        // Inicializa homeAdapter y configura recyclerViewReservaciones
-        homeAdapter = new HomeAdapter(todasLasReservaciones, requireContext());
-        recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewReservaciones.setAdapter(homeAdapter);
-
-        reservacionesRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Reservaciones");
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Borra la lista de reservaciones para llenarla con los nuevos datos
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 todasLasReservaciones.clear();
-
-                // Itera sobre los hijos del DataSnapshot
-                for (DataSnapshot reservaSnapshot : dataSnapshot.getChildren()) {
-                    // Deserializa el DataSnapshot en un objeto Reservaciones
-                    Reservaciones reserva = reservaSnapshot.getValue(Reservaciones.class);
-
-                    // Añade la reservación a la lista
-                    todasLasReservaciones.add(reserva);
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Reservaciones reservacion = snapshot.getValue(Reservaciones.class);
+                    todasLasReservaciones.add(reservacion);
                 }
 
-                // Notifica al adaptador sobre los cambios de datos
-                homeAdapter.notifyDataSetChanged();
+                // Filtra las reservaciones que coinciden con la fecha actual
+                List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
+                SimpleDateFormat formatDateReservation = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                for (Reservaciones reservacion : todasLasReservaciones) {
+                    try {
+                        Date date = formatDateReservation.parse(reservacion.getDateReservation());
+                        formatDateReservation = new SimpleDateFormat("dd/MM/yyyy");
+                        String dateWithoutTime = formatDateReservation.format(date);
+                        if (dateWithoutTime.equals(fechaActual)) {
+                            reservacionesFiltradas.add(reservacion);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                homeAdapter = new HomeAdapter(reservacionesFiltradas, requireContext());
+                recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerViewReservaciones.setAdapter(homeAdapter);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
