@@ -58,24 +58,8 @@ public class FragmentHome extends Fragment {
         obtenerTodasLasReservaciones();
 
         // Filtra las reservaciones que coinciden con la fecha actual
-        List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
-        SimpleDateFormat formatDateReservation = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        for (Reservaciones reservacion : todasLasReservaciones) {
-            try {
-                Date date = formatDateReservation.parse(reservacion.getDateReservation());
-                formatDateReservation = new SimpleDateFormat("dd/MM/yyyy");
-                String dateWithoutTime = formatDateReservation.format(date);
-                if (dateWithoutTime.equals(fechaActual)) {
-                    reservacionesFiltradas.add(reservacion);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        homeAdapter = new HomeAdapter(reservacionesFiltradas, requireContext());
-        recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewReservaciones.setAdapter(homeAdapter);
+        List<Reservaciones> reservacionesFiltradas = filtrarReservacionesPorFecha(todasLasReservaciones, fechaActual);
+        actualizaReservaciones(reservacionesFiltradas);
 
 
         calendarView_Item.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -114,6 +98,31 @@ public class FragmentHome extends Fragment {
         return viewHome;
     }
 
+    public List<Reservaciones> filtrarReservacionesPorFecha(List<Reservaciones> todasLasReservaciones, String fechaActual) {
+        List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
+        SimpleDateFormat formatDateReservation = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        for (Reservaciones reservacion : todasLasReservaciones) {
+            try {
+                Date date = formatDateReservation.parse(reservacion.getDateReservation());
+                formatDateReservation = new SimpleDateFormat("dd/MM/yyyy");
+                String dateWithoutTime = formatDateReservation.format(date);
+                if (dateWithoutTime.equals(fechaActual)) {
+                    reservacionesFiltradas.add(reservacion);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return reservacionesFiltradas;
+    }
+
+    public void actualizaReservaciones(List<Reservaciones> reservaciones) {
+        homeAdapter = new HomeAdapter(reservaciones, requireContext());
+        recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewReservaciones.setAdapter(homeAdapter);
+    }
+
+
     // Este método retorna todas las reservaciones
     public void obtenerTodasLasReservaciones() {
 
@@ -125,36 +134,25 @@ public class FragmentHome extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                todasLasReservaciones.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Reservaciones reservacion = snapshot.getValue(Reservaciones.class);
-                    todasLasReservaciones.add(reservacion);
-                }
-
-                // Filtra las reservaciones que coinciden con la fecha actual
-                List<Reservaciones> reservacionesFiltradas = new ArrayList<>();
-                SimpleDateFormat formatDateReservation = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                for (Reservaciones reservacion : todasLasReservaciones) {
-                    try {
-                        Date date = formatDateReservation.parse(reservacion.getDateReservation());
-                        formatDateReservation = new SimpleDateFormat("dd/MM/yyyy");
-                        String dateWithoutTime = formatDateReservation.format(date);
-                        if (dateWithoutTime.equals(fechaActual)) {
-                            reservacionesFiltradas.add(reservacion);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                if (isAdded()) { // Verifica si el fragmento todavía está adjunto a su actividad
+                    todasLasReservaciones.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Reservaciones reservacion = snapshot.getValue(Reservaciones.class);
+                        todasLasReservaciones.add(reservacion);
                     }
-                }
 
-                homeAdapter = new HomeAdapter(reservacionesFiltradas, requireContext());
-                recyclerViewReservaciones.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerViewReservaciones.setAdapter(homeAdapter);
+                    // Filtra las reservaciones que coinciden con la fecha actual
+                    List<Reservaciones> reservacionesFiltradas = filtrarReservacionesPorFecha(todasLasReservaciones, fechaActual);
+
+                    actualizaReservaciones(reservacionesFiltradas);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                if (isAdded()) { // Verifica si el fragmento todavía está adjunto a la actividad
+                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
