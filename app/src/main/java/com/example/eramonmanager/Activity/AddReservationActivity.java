@@ -416,10 +416,23 @@ public class AddReservationActivity extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(telStr)) {
                     showError("El campo Teléfono es requerido");
                     return;
-                } else if (TextUtils.isEmpty(cantidadPeopleStr)) {
+                } if (TextUtils.isEmpty(cantidadPeopleStr)) {
                     showError("El campo Cantidad de personas es requerido");
                     return;
-                } else if (TextUtils.isEmpty(dateReservationStr)) {
+                } else {
+                    try {
+                        int cantidadPeople = Integer.parseInt(cantidadPeopleStr);
+                        if (cantidadPeople <= 0) {
+                            showError("La cantidad de personas debe ser mayor que 0");
+                            return;
+                        }
+                    } catch (NumberFormatException e) {
+                        showError("Ingrese un número válido para la cantidad de personas");
+                        return;
+                    }
+                }
+
+                if (TextUtils.isEmpty(dateReservationStr)) {
                     showError("El campo Fecha de reservación es requerido");
                     return;
                 } else if (TextUtils.isEmpty(dateOutStr)) {
@@ -451,6 +464,7 @@ public class AddReservationActivity extends AppCompatActivity {
                     showError("El formato del número de teléfono no es válido");
                     return;
                 }
+
 
                 String idReservacion = mDatabase.child("Reservaciones").push().getKey();
                 RadioGroup radioGroup = findViewById(R.id.radioGroupStatus);
