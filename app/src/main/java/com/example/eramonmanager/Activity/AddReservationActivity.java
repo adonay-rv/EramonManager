@@ -85,13 +85,15 @@ public class AddReservationActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private boolean isImageUploaded = false;
 
-    EditText titleEditText,teledit,duiedit,cantidadedit,reservacionedit,salidaedit,precoedit;
+    EditText titleEditText, teledit, duiedit, cantidadedit, reservacionedit, salidaedit, precoedit;
     private ImageButton seleccionarButton;
-    private boolean[] selectedOptions;
+    private boolean[] selectedOptions1;
     private String[] options;
     RadioGroup estadoR;
 
     public String info;
+
+    private Map<String, String> selectedOptions = new HashMap<>();
 
 
     private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
@@ -103,6 +105,7 @@ public class AddReservationActivity extends AppCompatActivity {
                 }
             }
     );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +137,7 @@ public class AddReservationActivity extends AppCompatActivity {
 
         cantidadedit = findViewById(R.id.Add_Reservation_AmountPeople);
         cantidadedit.setEnabled(editable);
+        Button button1 = findViewById(R.id.Button_AddReservation);
 
         //receive data
         String title = getIntent().getStringExtra("title");
@@ -174,7 +178,7 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         }
 
-        if (title != null && !title.isEmpty()) {
+        if (docId != null && !docId.isEmpty()) {
             isEditMode = true;
         }
 
@@ -191,22 +195,43 @@ public class AddReservationActivity extends AppCompatActivity {
             pageTitleTextView.setText("Historial");
         } else {
             pageTitleTextView.setText("Editar Reservación");
+            button1.setText("Actualizar");
         }
 
         //Obtener los recursos seleccionados para volver a mostrarlos
         chipGroup = findViewById(R.id.ChipGroupResources);
 
         String recursos = getIntent().getStringExtra("recursos");
-
         if (recursos != null) {
             String[] opciones = recursos.split(" ");
 
             for (int i = 0; i < opciones.length; i += 3) {
                 if (i + 2 < opciones.length) {
-                    String opcion = opciones[i] + " " + opciones[i + 1] + " " + opciones[i + 2];
-                    Chip chip = new Chip(this);
+                    final String opcion = opciones[i] + " " + opciones[i + 1] + " " + opciones[i + 2];
+                    final Chip chip = new Chip(this);
                     chip.setText(opcion);
                     chip.setClickable(false);
+
+                    if (editable) {
+                        // Si estás en modo de edición, muestra el ícono de cierre
+                        chip.setCloseIconVisible(true);
+                        chip.setClickable(true);
+
+                        // Configura el listener para el cierre del Chip
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Elimina el Chip del chipGroup
+                                chipGroup.removeView(chip);
+
+                                // También puedes realizar acciones adicionales si es necesario
+
+                                // Actualiza la base de datos u otras operaciones según sea necesario
+                                // actualizarRecursos(opcion); // Puedes implementar este método
+                            }
+                        });
+                    }
+
                     chipGroup.addView(chip);
                 } else {
                     // Muestra un mensaje al usuario
@@ -217,10 +242,10 @@ public class AddReservationActivity extends AppCompatActivity {
 
 
         seleccionarButton = findViewById(R.id.SelectResources);
-        //seleccionarButton.setEnabled(editable);
+        seleccionarButton.setEnabled(editable);
 
         options = getResources().getStringArray(R.array.resource_array);
-        selectedOptions = new boolean[options.length];
+        selectedOptions1 = new boolean[options.length];
 
         seleccionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,7 +269,7 @@ public class AddReservationActivity extends AppCompatActivity {
             imageButton1.setVisibility(View.VISIBLE);
         }
 
-        Button button1 = findViewById(R.id.Button_AddReservation);
+
 
         if (editable == false) {
             button1.setVisibility(View.GONE);
@@ -432,12 +457,23 @@ public class AddReservationActivity extends AppCompatActivity {
                 String estado = obtenerEstadoPorRadioButtonId(radioButtonId);
 
                 Reservaciones reservaciones = new Reservaciones();
-                if (isEditMode) {
 
+                if (isEditMode) {
                     // Modo de edición: Actualizar la reserva existente
                     reservaciones.actualizarReserva(
                             docId, nombreReservacion, duiStr, telStr, cantidadPeopleStr, info,
                             dateReservationStr, dateOutStr, priceStr, estado, imageUrl1);
+
+                    // Limpiar el chipGroup antes de agregar las opciones actualizadas
+                    chipGroup.removeAllViews();
+
+                    // Agregar las opciones del chipGroup a selectedOptions
+                    for (int i = 0; i < chipGroup.getChildCount(); i++) {
+                        Chip chip = (Chip) chipGroup.getChildAt(i);
+                        String opcion = chip.getText().toString();
+                        selectedOptions.put(obtenerNombreRecurso(opcion), obtenerCantidad(opcion));
+                    }
+
                 } else {
                     // Modo de creación: Crear una nueva reserva
                     reservaciones.crearReservacion(
@@ -454,6 +490,7 @@ public class AddReservationActivity extends AppCompatActivity {
 
                 // Cerrar la actividad o realizar otras acciones según sea necesario
                 finish();
+
             }
         });
 
@@ -465,7 +502,7 @@ public class AddReservationActivity extends AppCompatActivity {
             seleccionarButton.setVisibility(View.VISIBLE);
         }
 
-        selectedOptions = new boolean[options.length];
+        selectedOptions1 = new boolean[options.length];
 
         seleccionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -535,6 +572,150 @@ public class AddReservationActivity extends AppCompatActivity {
         }
     }
 
+    private String obtenerNombreRecurso(String opcion) {
+        // Supongamos que el nombre del recurso está antes del guión "-"
+        String[] partes = opcion.split("-");
+        if (partes.length > 0) {
+            return partes[0].trim();
+        } else {
+            return "";
+        }
+    }
+
+    private String obtenerCantidad(String opcion) {
+        // Supongamos que la cantidad está después del guión "-"
+        String[] partes = opcion.split("-");
+        if (partes.length > 1) {
+            return partes[1].trim();
+        } else {
+            return "";
+        }
+    }
+
+
+    private void showOptionSelectionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecciona las opciones");
+
+        // Crear una lista de vistas que contengan un TextView y un EditText para cada opción
+        List<View> optionViews = new ArrayList<>();
+
+        for (int i = 0; i < options.length; i++) {
+            View optionView = getLayoutInflater().inflate(R.layout.item_dialog_option, null);
+
+            // Configurar el TextView con la opción
+            TextView optionTextView = optionView.findViewById(R.id.dialogOptionTextView);
+            optionTextView.setText(options[i]);
+
+            // Configurar el EditText para la cantidad (solo números)
+            EditText editText = optionView.findViewById(R.id.dialogEditText);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            // Si la opción está seleccionada previamente, restaurar el valor
+            if (selectedOptions.containsKey(options[i])) {
+                editText.setText(selectedOptions.get(options[i]));
+            }
+
+            // Agregar la vista a la lista
+            optionViews.add(optionView);
+        }
+
+        // Agregar las vistas a un LinearLayout dentro del diálogo
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        for (View optionView : optionViews) {
+            linearLayout.addView(optionView);
+        }
+
+        builder.setView(linearLayout);
+
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String updatedInfo = updateChipGroup(optionViews);
+                info = updatedInfo; // Actualizar la variable info con la nueva información
+            }
+        });
+
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    private String updateChipGroup(List<View> optionViews) {
+        int chipCount = chipGroup.getChildCount();
+        StringBuilder updatedInfo = new StringBuilder();
+
+        for (int i = 0; i < options.length; i++) {
+            View optionView = optionViews.get(i);
+            EditText editText = optionView.findViewById(R.id.dialogEditText);
+            String currentInput = editText.getText().toString();
+
+            if (!currentInput.isEmpty()) {
+                boolean found = false;
+
+                for (int j = 0; j < chipCount; j++) {
+                    Chip chip = (Chip) chipGroup.getChildAt(j);
+                    String chipText = chip.getText().toString();
+                    String resourceName = options[i];
+
+                    if (chipText.contains(resourceName)) {
+                        // Actualiza la cantidad sin eliminar el chip
+                        chip.setText(resourceName + " -cant " + currentInput);
+                        found = true;
+
+                        // Actualiza la opción en el mapa selectedOptions
+                        selectedOptions.put(resourceName, currentInput);
+                        updatedInfo.append(resourceName).append(" -cant ").append(currentInput).append(" ");
+
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    // Si el chip no existe, crea uno nuevo
+                    Chip dynamicChip = new Chip(this);
+                    String resourceName = options[i];
+                    String formattedOption = resourceName + " -cant " + currentInput;
+                    dynamicChip.setText(formattedOption);
+                    dynamicChip.setCloseIconVisible(true);
+                    dynamicChip.setCheckable(false);
+
+                    // Agrega la nueva opción al mapa selectedOptions
+                    selectedOptions.put(resourceName, currentInput);
+                    updatedInfo.append(formattedOption).append(" ");
+
+                    final int optionIndex = i;
+
+                    dynamicChip.setOnCloseIconClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            chipGroup.removeView(dynamicChip);
+                            selectedOptions.remove(resourceName);
+                        }
+                    });
+
+                    chipGroup.addView(dynamicChip);
+                }
+            }
+        }
+
+        // Conserva los recursos existentes que no se actualizaron ni agregaron
+        for (int i = 0; i < chipCount; i++) {
+            Chip chip = (Chip) chipGroup.getChildAt(i);
+            String chipText = chip.getText().toString();
+
+            if (!updatedInfo.toString().contains(chipText)) {
+                updatedInfo.append(chipText).append(" ");
+            }
+        }
+
+        return updatedInfo.toString().trim();
+    }
+
+
+
     private final ActivityResultLauncher<Intent> manageStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> {
@@ -544,6 +725,8 @@ public class AddReservationActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+
     private void checkAndOpenGallery() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
@@ -679,80 +862,6 @@ public class AddReservationActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void showOptionSelectionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Selecciona las opciones");
-
-        // Crear una lista de vistas que contengan un TextView y un EditText para cada opción
-        List<View> optionViews = new ArrayList<>();
-
-        for (int i = 0; i < options.length; i++) {
-            View optionView = getLayoutInflater().inflate(R.layout.item_dialog_option, null);
-
-            // Configurar el TextView con la opción
-            TextView optionTextView = optionView.findViewById(R.id.dialogOptionTextView);
-            optionTextView.setText(options[i]);
-
-            // Configurar el EditText para la cantidad (solo números)
-            EditText editText = optionView.findViewById(R.id.dialogEditText);
-            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-            // Agregar la vista a la lista
-            optionViews.add(optionView);
-        }
-
-        // Agregar las vistas a un LinearLayout dentro del diálogo
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-        for (View optionView : optionViews) {
-            linearLayout.addView(optionView);
-        }
-
-        builder.setView(linearLayout);
-
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                updateChipGroup(optionViews);
-            }
-        });
-
-        builder.setNegativeButton("Cancelar", null);
-        builder.show();
-    }
-
-    private void updateChipGroup(List<View> optionViews) {
-        chipGroup.removeAllViews();
-        info = ""; //Limpiar la variable info antes de agregarle nuevas opciones
-
-        for (int i = 0; i < options.length; i++) {
-            View optionView = optionViews.get(i);
-            EditText editText = optionView.findViewById(R.id.dialogEditText);
-
-            if (!editText.getText().toString().isEmpty()) {
-                Chip dynamicChip = new Chip(this);
-                dynamicChip.setText(options[i] + " -cant " + editText.getText().toString());
-                info += options[i] + " -cant " + editText.getText().toString() + " ";
-                dynamicChip.setCloseIconVisible(true);
-                dynamicChip.setCheckable(false);
-                dynamicChip.setOnCloseIconClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editText.getText().clear();
-                        updateChipGroup(optionViews);
-                    }
-                });
-                chipGroup.addView(dynamicChip);
-            }
-        }
-
-        //Nueva instancia de Reservaciones - Guarda las opciones seleccionadas
-        Reservaciones reservacion = new Reservaciones();
-        reservacion.setRescursos(info);
-    }
-
 
 
     @SuppressLint("NonConstantResourceId")

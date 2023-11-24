@@ -1,3 +1,5 @@
+
+
 package com.example.eramonmanager.Activity;
 
 import static android.content.ContentValues.TAG;
@@ -185,22 +187,13 @@ public class Reservaciones implements Serializable {
         // Obtén una referencia a la reserva que deseas actualizar utilizando su ID
         DatabaseReference reservaRef = databaseReference.child(idReservacion);
 
-        // Construye el mapa de valores que se van a actualizar
-        Map<String, Object> reservaMap = new HashMap<>();
-        reservaMap.put("nombre", nombreReservacion);
-        reservaMap.put("dui", dui);
-        reservaMap.put("tel", tel);
-        reservaMap.put("cantidadPersonas", cantidadPeople);
-        reservaMap.put("recursos", info);
-        reservaMap.put("dateReservation", dateReservation);
-        reservaMap.put("dateOut", dateOut);
-        reservaMap.put("precioReservacion", precioReservacion);
-        reservaMap.put("estado", estado);
+        Reservaciones reservacionActualizada = new Reservaciones(
+                idReservacion, nombreReservacion, dui, tel, cantidadPeople,
+                info, dateReservation, dateOut, precioReservacion,
+                estado, imageUrl);
 
-        reservaMap.put("comprobantePago", imageUrl);  // Actualiza la URL de la imagen
-
-        // Actualiza los valores en la base de datos
-        reservaRef.updateChildren(reservaMap)
+        // Guarda la reservación actualizada en la base de datos, reemplazando la existente
+        reservaRef.setValue(reservacionActualizada)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -216,5 +209,6 @@ public class Reservaciones implements Serializable {
                     }
                 });
     }
+
 
 }
