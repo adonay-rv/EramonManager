@@ -19,11 +19,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.eramonmanager.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +43,8 @@ public class AddResourceActivity extends AppCompatActivity {
     private boolean isImageUploaded = false;
     private String idRecursos;
     private Button imageButton;
+    private String currentImageFileName;
+
 
     private ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -93,16 +97,97 @@ public class AddResourceActivity extends AppCompatActivity {
             } else if (Cantidad.isEmpty()) {
                 Cantidad1.setError("La cantidad es requerida");
                 return;
-            } else if (!isImageUploaded) {
-                Toast.makeText(AddResourceActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
-                return;
             }
 
-            guardarRecursoEnFirebase(idRecursos, nombreRecurso, Integer.parseInt(Cantidad), imageUrl);
+            // Obtener datos del Intent
+            Intent intent = getIntent();
+            if (intent.hasExtra("recursoSeleccionado")) {
+                Recursos recursoSeleccionado = (Recursos) intent.getSerializableExtra("recursoSeleccionado");
+
+                // Si no se ha subido una nueva imagen, mantén la imagen existente
+                if (!isImageUploaded) {
+                    imageUrl = recursoSeleccionado.getImagenUrl();
+                }
+
+                // Actualizar el recurso existente
+                actualizarRecursoEnFirebase(recursoSeleccionado.getIdRecursos(), nombreRecurso, Integer.parseInt(Cantidad), imageUrl);
+            } else {
+
+                if (!isImageUploaded) {
+                    Toast.makeText(AddResourceActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Crear un nuevo recurso si no existe
+                Date date = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String fechaActual = dateFormat.format(date);
+                Recursos recursos = new Recursos();
+
+                recursos.Crear(idRecursos, nombreRecurso, Integer.parseInt(Cantidad), imageUrl, fechaActual);
+
+                // Se guardó con éxito
+                Toast.makeText(AddResourceActivity.this, "El recurso se ha guardado exitosamente", Toast.LENGTH_SHORT).show();
+
+                finish();
+            }
         });
+
+        // Obtener datos del Intent
+        Intent intent = getIntent();
+        if (intent.hasExtra("recursoSeleccionado")) {
+            Recursos recursoSeleccionado = (Recursos) intent.getSerializableExtra("recursoSeleccionado");
+
+            // Actualizar la interfaz con los detalles del recurso
+            updateUIWithResourceDetails(recursoSeleccionado);
+        }
+
+        imageButton.setOnClickListener(view -> {
+            // Verificar si hay una imagen actual
+            if (currentImageFileName != null) {
+                // Eliminar la imagen actual de Firebase Storage
+                StorageReference existingImageRef = storage.getReference().child(currentImageFileName);
+                existingImageRef.delete().addOnSuccessListener(aVoid -> {
+                    // Después de eliminar la imagen existente, subir la nueva imagen
+                    checkAndOpenGallery();
+                }).addOnFailureListener(exception -> {
+                    // Manejar fallos al eliminar la imagen existente
+                    Toast.makeText(AddResourceActivity.this, "Error al eliminar la imagen existente", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                // Si no hay una imagen actual, simplemente pedir al usuario que seleccione una nueva imagen
+                checkAndOpenGallery();
+            }
+        });
+
 
         imageButton.setOnClickListener(view -> checkAndOpenGallery());
     }
+
+    private void updateUIWithResourceDetails(Recursos recurso) {
+        // Actualiza la interfaz con los detalles del recurso (por ejemplo, setText en TextViews, carga de imagen, etc.)
+        EditText nombreRecurso1 = findViewById(R.id.Add_Resource_Name);
+        EditText cantidad1 = findViewById(R.id.Add_Resource_Mount);
+        ShapeableImageView imageResource = findViewById(R.id.ImageResource);
+
+        nombreRecurso1.setText(recurso.getNombreRecurso());
+        cantidad1.setText(String.valueOf(recurso.getCantidadRecurso()));
+
+        // Carga la imagen con Glide o Picasso
+        Glide.with(this)
+                .load(recurso.getImagenUrl())
+                .centerCrop()
+                .into(imageResource);
+
+        currentImageFileName = getFileNameFromUrl(recurso.getImagenUrl());
+
+    }
+
+    private String getFileNameFromUrl(String url) {
+        Uri uri = Uri.parse(url);
+        return uri.getLastPathSegment();
+    }
+
 
     private final ActivityResultLauncher<Intent> manageStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -150,61 +235,71 @@ public class AddResourceActivity extends AppCompatActivity {
 
     private void uploadImage(Uri filePath) {
         if (filePath != null) {
-            String nombreImagen = "images/" + System.currentTimeMillis() + ".jpg";
-
-            // Mostrar mensaje de subida en proceso
-            Toast.makeText(AddResourceActivity.this, "Subiendo imagen...", Toast.LENGTH_SHORT).show();
-
-            storage.getReference().child(nombreImagen).putFile(filePath)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Obtener la URL de descarga de la imagen subida
-                        storage.getReference().child(nombreImagen).getDownloadUrl()
-                                .addOnSuccessListener(uri -> {
-                                    imageUrl = uri.toString();
-                                    isImageUploaded = true;
-
-                                    // Mostrar mensaje de éxito
-                                    Toast.makeText(AddResourceActivity.this, "Imagen subida con éxito", Toast.LENGTH_SHORT).show();
-                                })
-                                .addOnFailureListener(e -> {
-                                    // Manejar fallos
-                                    Toast.makeText(AddResourceActivity.this, "Error al obtener la URL de la imagen", Toast.LENGTH_SHORT).show();
-                                });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejar fallos
-                        Toast.makeText(AddResourceActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
-                    });
+            // Verificar si hay una imagen actual
+            if (currentImageFileName != null) {
+                // Eliminar la imagen actual de Firebase Storage
+                StorageReference existingImageRef = storage.getReference().child(currentImageFileName);
+                existingImageRef.delete().addOnSuccessListener(aVoid -> {
+                    // Después de eliminar la imagen existente, subir la nueva imagen
+                    uploadNewImage(filePath);
+                }).addOnFailureListener(exception -> {
+                    // Manejar fallos al eliminar la imagen existente
+                    Toast.makeText(AddResourceActivity.this, "Error al eliminar la imagen existente", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                // Si no hay una imagen actual, simplemente subir la nueva imagen
+                uploadNewImage(filePath);
+            }
         }
     }
 
+    private void uploadNewImage(Uri filePath) {
+        String nombreImagen = "images/" + System.currentTimeMillis() + ".jpg";
 
-    private void guardarRecursoEnFirebase(String idRecursos, String nombreRecurso, int cantidad, String imageUrl) {
+        // Mostrar mensaje de subida en proceso
+        Toast.makeText(AddResourceActivity.this, "Subiendo imagen...", Toast.LENGTH_SHORT).show();
+
+        storage.getReference().child(nombreImagen).putFile(filePath)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Obtener la URL de descarga de la imagen subida
+                    storage.getReference().child(nombreImagen).getDownloadUrl()
+                            .addOnSuccessListener(uri -> {
+                                imageUrl = uri.toString();
+                                isImageUploaded = true;
+
+                                // Mostrar mensaje de éxito
+                                Toast.makeText(AddResourceActivity.this, "Imagen subida con éxito", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Manejar fallos
+                                Toast.makeText(AddResourceActivity.this, "Error al obtener la URL de la imagen", Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    // Manejar fallos
+                    Toast.makeText(AddResourceActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
+    // Métodos de actualización
+    private void actualizarRecursoEnFirebase(String idRecursos, String nuevoNombre, int nuevaCantidad, String nuevaImageUrl) {
+        // Obtener la fecha actual
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String fechaActual = dateFormat.format(date);
-        Recursos recursos = new Recursos();
 
-        recursos.buscarEnFirebase(idRecursos, new Recursos.BusquedaCallback() {
-            @Override
-            public void onResultado(boolean encontrado) {
-                if (encontrado) {
-                    recursos.Actualizar(idRecursos, cantidad, nombreRecurso, imageUrl, fechaActual);
-                } else {
-                    recursos.Crear(idRecursos, nombreRecurso, cantidad, imageUrl, fechaActual);
-                }
+        // Actualizar el recurso en Firebase
+        DatabaseReference recursoRef = mDatabase.child("Recursos").child(idRecursos);
+        recursoRef.child("nombreRecurso").setValue(nuevoNombre);
+        recursoRef.child("cantidadRecurso").setValue(nuevaCantidad);
+        recursoRef.child("imagenUrl").setValue(nuevaImageUrl);
+        recursoRef.child("fechaActualizacion").setValue(fechaActual);
 
-                // Se guardó con éxito
-                Toast.makeText(AddResourceActivity.this, "El recurso se ha guardado exitosamente", Toast.LENGTH_SHORT).show();
+        // Mostrar mensaje de éxito
+        Toast.makeText(AddResourceActivity.this, "Recurso actualizado con éxito", Toast.LENGTH_SHORT).show();
 
-                // Limpiar los campos después de agregar con éxito
-                EditText nombreRecurso1 = findViewById(R.id.Add_Resource_Name);
-                EditText Cantidad1 = findViewById(R.id.Add_Resource_Mount);
-                ShapeableImageView ImageResource = findViewById(R.id.ImageResource);
-                nombreRecurso1.setText("");
-                Cantidad1.setText("");
-                ImageResource.setImageResource(R.drawable.glamping);
-            }
-        });
+        finish();
     }
+
 }

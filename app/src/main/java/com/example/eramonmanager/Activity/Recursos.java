@@ -10,12 +10,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Recursos {
+public class Recursos implements Serializable {
     private String idRecursos;
     private String nombreRecurso;
     private int cantidadRecurso;
@@ -116,11 +117,9 @@ public class Recursos {
         });
     }
 
-
-
     public void Actualizar(String idRecurso, int nuevaCantidad, String nuevoNombre, String nuevaImagenUrl, String nuevaFecha) {
-        DatabaseReference recursosRef = FirebaseDatabase.getInstance().getReference("Recursos");
-        String idRecursosAActualizar = idRecurso;
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Recursos");
+        DatabaseReference reservaRef = databaseReference.child(idRecurso);
 
         Map<String, Object> actualizacion = new HashMap<>();
         actualizacion.put("nombreRecurso", nuevoNombre);
@@ -128,8 +127,10 @@ public class Recursos {
         actualizacion.put("imagenUrl", nuevaImagenUrl);
         actualizacion.put("fechaActualizacion", nuevaFecha);
 
-        recursosRef.child(idRecursosAActualizar).updateChildren(actualizacion);
+        // Aplicar la actualización a la base de datos
+        reservaRef.updateChildren(actualizacion);
     }
+
 
     public void Crear(String idRecursos, String nombreRecurso, int cantidad, String imagenUrl, String fecha) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();

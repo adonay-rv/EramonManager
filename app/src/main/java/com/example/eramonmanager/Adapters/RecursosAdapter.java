@@ -3,6 +3,7 @@ package com.example.eramonmanager.Adapters;
 import static com.example.eramonmanager.Activity.Recursos.Eliminar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eramonmanager.Activity.AddResourceActivity;
 import com.example.eramonmanager.Activity.Recursos;
 import com.example.eramonmanager.R;
 
@@ -59,9 +61,16 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
                 .centerCrop()
                 .into(holder.imageView);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Manejar el clic en el elemento de la lista
+                showResourceDetails(recursos);
+            }
+        });
+
         final String resourceId = recursos.getIdRecursos(); // Reemplaza getIdDelRecurso con el método adecuado para obtener el ID
 
-        // Botón de eliminación
         // Botón de eliminación
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,5 +115,11 @@ public class RecursosAdapter extends RecyclerView.Adapter<RecursosAdapter.Recurs
             nombresYCantidades.add(nombreYCantidad);
         }
         return nombresYCantidades;
+    }
+    public void showResourceDetails(Recursos recurso) {
+        // Puedes usar un Intent para pasar información a AddResourceActivity
+        Intent intent = new Intent(context, AddResourceActivity.class);
+        intent.putExtra("recursoSeleccionado", recurso);
+        context.startActivity(intent);
     }
 }
