@@ -203,44 +203,38 @@ public class AddReservationActivity extends AppCompatActivity {
 
         String recursos = getIntent().getStringExtra("recursos");
         if (recursos != null) {
-            String[] opciones = recursos.split(" ");
+            // Utiliza una expresión regular para dividir la cadena de recursos en bloques
+            String[] opciones = recursos.split("(?<=\\d)(?=\\D)");
 
-            for (int i = 0; i < opciones.length; i += 3) {
-                if (i + 2 < opciones.length) {
-                    final String opcion = opciones[i] + " " + opciones[i + 1] + " " + opciones[i + 2];
-                    final Chip chip = new Chip(this);
-                    chip.setText(opcion);
-                    chip.setSingleLine(true); // Asegura que el texto del chip se muestre en una sola línea
-                    chip.setClickable(false);
+            for (String opcion : opciones) {
+                opcion = opcion.trim(); // Elimina los espacios en blanco al principio y al final
+                final Chip chip = new Chip(this);
+                chip.setText(opcion);
+                chip.setClickable(false);
 
-                    if (editable) {
-                        // Si estás en modo de edición, muestra el ícono de cierre
-                        chip.setCloseIconVisible(true);
-                        chip.setClickable(true);
+                if (editable) {
+                    // Si estás en modo de edición, muestra el ícono de cierre
+                    chip.setCloseIconVisible(true);
+                    chip.setClickable(true);
 
-                        // Configura el listener para el cierre del Chip
-                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // Elimina el Chip del chipGroup
-                                chipGroup.removeView(chip);
+                    // Configura el listener para el cierre del Chip
+                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Elimina el Chip del chipGroup
+                            chipGroup.removeView(chip);
 
-                                // También puedes realizar acciones adicionales si es necesario
+                            // También puedes realizar acciones adicionales si es necesario
 
-                                // Actualiza la base de datos u otras operaciones según sea necesario
-                                // actualizarRecursos(opcion); // Puedes implementar este método
-                            }
-                        });
-                    }
-
-                    chipGroup.addView(chip);
-                } else {
-                    // Muestra un mensaje al usuario
-                    Toast.makeText(this, "Error de formato", Toast.LENGTH_SHORT).show();
+                            // Actualiza la base de datos u otras operaciones según sea necesario
+                            // actualizarRecursos(opcion); // Puedes implementar este método
+                        }
+                    });
                 }
+
+                chipGroup.addView(chip);
             }
         }
-
 
         seleccionarButton = findViewById(R.id.SelectResources);
         seleccionarButton.setEnabled(editable);
@@ -677,12 +671,12 @@ public class AddReservationActivity extends AppCompatActivity {
 
                     if (chipText.contains(resourceName)) {
                         // Actualiza la cantidad sin eliminar el chip
-                        chip.setText(resourceName + " |cant " + currentInput);
+                        chip.setText(resourceName + " -cant " + currentInput);
                         found = true;
 
                         // Actualiza la opción en el mapa selectedOptions
                         selectedOptions.put(resourceName, currentInput);
-                        updatedInfo.append(resourceName).append(" |cant ").append(currentInput).append(" ");
+                        updatedInfo.append(resourceName).append(" -cant ").append(currentInput).append(" ");
 
                         break;
                     }
@@ -728,8 +722,6 @@ public class AddReservationActivity extends AppCompatActivity {
 
         return updatedInfo.toString().trim();
     }
-
-
 
     private final ActivityResultLauncher<Intent> manageStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
