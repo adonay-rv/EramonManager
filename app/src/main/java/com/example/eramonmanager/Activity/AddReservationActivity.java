@@ -210,6 +210,7 @@ public class AddReservationActivity extends AppCompatActivity {
                     final String opcion = opciones[i] + " " + opciones[i + 1] + " " + opciones[i + 2];
                     final Chip chip = new Chip(this);
                     chip.setText(opcion);
+                    chip.setSingleLine(true); // Asegura que el texto del chip se muestre en una sola línea
                     chip.setClickable(false);
 
                     if (editable) {
@@ -676,12 +677,12 @@ public class AddReservationActivity extends AppCompatActivity {
 
                     if (chipText.contains(resourceName)) {
                         // Actualiza la cantidad sin eliminar el chip
-                        chip.setText(resourceName + " -cant " + currentInput);
+                        chip.setText(resourceName + " |cant " + currentInput);
                         found = true;
 
                         // Actualiza la opción en el mapa selectedOptions
                         selectedOptions.put(resourceName, currentInput);
-                        updatedInfo.append(resourceName).append(" -cant ").append(currentInput).append(" ");
+                        updatedInfo.append(resourceName).append(" |cant ").append(currentInput).append(" ");
 
                         break;
                     }
